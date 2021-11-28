@@ -1,26 +1,36 @@
 import { Injectable } from '@nestjs/common';
 import { CreateAllergenCategoryDto } from './dto/create-allergen-category.dto';
 import { UpdateAllergenCategoryDto } from './dto/update-allergen-category.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { AllergenCategory } from './entities/allergen-category.entity';
 
 @Injectable()
 export class AllergenCategoryService {
+
+  constructor(
+    @InjectRepository(AllergenCategory)
+    private allergenCategoryRepository: Repository<AllergenCategory>,
+  ) {}
+
   create(createAllergenCategoryDto: CreateAllergenCategoryDto) {
-    return 'This action adds a new allergenCategory';
+    return this.allergenCategoryRepository.save(createAllergenCategoryDto);
   }
 
   findAll() {
-    return `This action returns all allergenCategory`;
+    return this.allergenCategoryRepository.find();
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} allergenCategory`;
+    return this.allergenCategoryRepository.find({id: id});
   }
 
-  update(id: number, updateAllergenCategoryDto: UpdateAllergenCategoryDto) {
-    return `This action updates a #${id} allergenCategory`;
+  update(id: number, updateIngredientCategoryDto: UpdateAllergenCategoryDto) {
+    return this.allergenCategoryRepository.update({id:id},UpdateAllergenCategoryDto);;
   }
 
   remove(id: number) {
-    return `This action removes a #${id} allergenCategory`;
+    return this.allergenCategoryRepository.delete({id:id});
   }
+
 }
