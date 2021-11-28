@@ -9,10 +9,11 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Ingredient } from './ingredient/entities/ingredient.entity';
 import { AllergenCategoryModule } from './allergen-category/allergen-category.module';
 import { IngredientCategoryModule } from './ingredient-category/ingredient-category.module';
+import { AllergenCategory } from './allergen-category/entities/allergen-category.entity';
+import { IngredientCategory } from './ingredient-category/entities/ingredient-category.entity';
 
 @Module({
   imports: [
-    IngredientModule,
     ConfigModule.forRoot(),
     TypeOrmModule.forRoot({
       url: process.env.DATABASE_URL,
@@ -20,13 +21,18 @@ import { IngredientCategoryModule } from './ingredient-category/ingredient-categ
       ssl: {
         rejectUnauthorized: false,
       },
-      entities: [Ingredient],
+      entities: [
+        Ingredient,
+        AllergenCategory,
+        IngredientCategory
+      ],
       //entities: ['dist/**/*.entity{.ts,.js}'],
       synchronize: true, // This for development
       //autoLoadEntities: true,
     }),
     AllergenCategoryModule,
     IngredientCategoryModule,
+    IngredientModule,
   ],
   controllers: [AppController],
   providers: [AppService],

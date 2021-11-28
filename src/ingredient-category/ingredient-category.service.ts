@@ -1,26 +1,35 @@
 import { Injectable } from '@nestjs/common';
 import { CreateIngredientCategoryDto } from './dto/create-ingredient-category.dto';
 import { UpdateIngredientCategoryDto } from './dto/update-ingredient-category.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { IngredientCategory } from './entities/ingredient-category.entity';
 
 @Injectable()
 export class IngredientCategoryService {
+
+  constructor(
+    @InjectRepository(IngredientCategory)
+    private ingredientCategoryRepository: Repository<IngredientCategory>,
+  ) {}
+
   create(createIngredientCategoryDto: CreateIngredientCategoryDto) {
-    return 'This action adds a new ingredientCategory';
+    return this.ingredientCategoryRepository.save(createIngredientCategoryDto);
   }
 
   findAll() {
-    return `This action returns all ingredientCategory`;
+    return this.ingredientCategoryRepository.find();
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} ingredientCategory`;
+    return this.ingredientCategoryRepository.find({id: id});
   }
 
   update(id: number, updateIngredientCategoryDto: UpdateIngredientCategoryDto) {
-    return `This action updates a #${id} ingredientCategory`;
+    return this.ingredientCategoryRepository.update({id:id},updateIngredientCategoryDto);;
   }
 
   remove(id: number) {
-    return `This action removes a #${id} ingredientCategory`;
+    return this.ingredientCategoryRepository.delete({id:id});
   }
 }
