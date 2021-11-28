@@ -2,15 +2,24 @@ import { Injectable } from '@nestjs/common';
 import { CreateIngredientDto } from './dto/create-ingredient.dto';
 import { UpdateIngredientDto } from './dto/update-ingredient.dto';
 import {Ingredient} from "./entities/ingredient.entity";
+import { Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class IngredientService {
+
+  constructor(
+    @InjectRepository(Ingredient)
+    private ingredientRepository: Repository<Ingredient>,
+  ) {}
+
   create(createIngredientDto: CreateIngredientDto) {
-    return 'This action adds a new ingredient';
+    return this.ingredientRepository.save(new Ingredient("Test", 15, "KG"));
   }
 
   findAll() {
-    return new Ingredient("Daurade", 15, "KG");
+    return this.ingredientRepository.find({});
+   // return new Ingredient("Daurade", 15, "KG");
   }
 
   findOne(id: number) {
@@ -22,6 +31,6 @@ export class IngredientService {
   }
 
   remove(id: number) {
-    return `This action removes a #${id} ingredient`;
+    return this.ingredientRepository.delete({id: id});
   }
 }
