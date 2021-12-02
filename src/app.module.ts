@@ -11,6 +11,12 @@ import { AllergenCategoryModule } from './allergen-category/allergen-category.mo
 import { IngredientCategoryModule } from './ingredient-category/ingredient-category.module';
 import { AllergenCategory } from './allergen-category/entities/allergen-category.entity';
 import { IngredientCategory } from './ingredient-category/entities/ingredient-category.entity';
+import { IngredientWithinStepModule } from './ingredient-within-step/ingredient-within-step.module';
+import { IngredientWithinStep } from './ingredient-within-step/entities/ingredient-within-step.entity';
+import { RecipeExecutionModule } from './recipe-execution/recipe-execution.module';
+import { RecipeExecution } from './recipe-execution/entities/recipe-execution.entity';
+import { StepWithinRecipeExecutionModule } from './step-within-recipe-execution/step-within-recipe-execution.module';
+import { StepWithinRecipeExecution } from './step-within-recipe-execution/entities/step-within-recipe-execution.entity';
 
 @Module({
   imports: [
@@ -24,7 +30,10 @@ import { IngredientCategory } from './ingredient-category/entities/ingredient-ca
       entities: [
         Ingredient,
         AllergenCategory,
-        IngredientCategory
+        IngredientCategory,
+        IngredientWithinStep,
+        RecipeExecution,
+        StepWithinRecipeExecution,
       ],
       //entities: ['dist/**/*.entity{.ts,.js}'],
       synchronize: true, // This for development
@@ -33,6 +42,9 @@ import { IngredientCategory } from './ingredient-category/entities/ingredient-ca
     AllergenCategoryModule,
     IngredientCategoryModule,
     IngredientModule,
+    IngredientWithinStepModule,
+    RecipeExecutionModule,
+    StepWithinRecipeExecutionModule,
   ],
   controllers: [AppController],
   providers: [AppService],

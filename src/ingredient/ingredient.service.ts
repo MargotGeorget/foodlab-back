@@ -14,7 +14,7 @@ export class IngredientService {
   ) {}
 
   create(createIngredientDto: CreateIngredientDto) {
-    return this.ingredientRepository.save(new Ingredient("Test", 15, "KG"));
+    return this.ingredientRepository.save(createIngredientDto);
   }
 
   findAll() {
