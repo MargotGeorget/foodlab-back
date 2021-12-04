@@ -1,5 +1,7 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn} from 'typeorm';
 import { IngredientWithinStep } from '../../ingredient-within-step/entities/ingredient-within-step.entity';
+import {AllergenCategory} from "../../allergen-category/entities/allergen-category.entity";
+import {IngredientCategory} from "../../ingredient-category/entities/ingredient-category.entity";
 
 @Entity()
 export class Ingredient {
@@ -18,5 +20,10 @@ export class Ingredient {
     @OneToMany(() => IngredientWithinStep, ingredientWithinStep => ingredientWithinStep.ingredient)
     steps: IngredientWithinStep[];
 
+    // Ingredient will have AllergenCategory's foreign key
+    @ManyToOne(() => AllergenCategory, allergenCategory => allergenCategory.ingredient)
+    allergenCategory: number;
 
+    @ManyToOne(() => IngredientCategory, ingredientCategory => ingredientCategory.ingredient)
+    ingredientCategory: number;
 }
