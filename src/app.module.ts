@@ -11,6 +11,8 @@ import { AllergenCategoryModule } from './allergen-category/allergen-category.mo
 import { IngredientCategoryModule } from './ingredient-category/ingredient-category.module';
 import { AllergenCategory } from './allergen-category/entities/allergen-category.entity';
 import { IngredientCategory } from './ingredient-category/entities/ingredient-category.entity';
+import { RecipeCategoryModule } from './recipe-category/recipe-category.module';
+import {RecipeCategory} from "./recipe-category/entities/recipe-category.entity";
 
 @Module({
   imports: [
@@ -24,7 +26,8 @@ import { IngredientCategory } from './ingredient-category/entities/ingredient-ca
       entities: [
         Ingredient,
         AllergenCategory,
-        IngredientCategory
+        IngredientCategory,
+        RecipeCategory
       ],
       //entities: ['dist/**/*.entity{.ts,.js}'],
       synchronize: true, // This for development
@@ -33,6 +36,7 @@ import { IngredientCategory } from './ingredient-category/entities/ingredient-ca
     AllergenCategoryModule,
     IngredientCategoryModule,
     IngredientModule,
+    RecipeCategoryModule,
   ],
   controllers: [AppController],
   providers: [AppService],
