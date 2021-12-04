@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { IngredientWithinStep } from '../../ingredient-within-step/entities/ingredient-within-step.entity';
 
 @Entity()
 export class Ingredient {
@@ -7,14 +8,15 @@ export class Ingredient {
 
     @Column()
     name: string
+
     @Column()
     unitaryPrice: number
+
     @Column()
     unit: string
 
-    constructor(name: string, unitaryPrice: number, unit: string) {
-        this.name = name;
-        this.unitaryPrice = unitaryPrice;
-        this.unit = unit;
-    }
+    @OneToMany(() => IngredientWithinStep, ingredientWithinStep => ingredientWithinStep.ingredient)
+    steps: IngredientWithinStep[];
+
+
 }
