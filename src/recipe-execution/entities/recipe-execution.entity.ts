@@ -1,6 +1,7 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {Column, Entity, OneToMany, OneToOne, PrimaryGeneratedColumn} from 'typeorm';
 import { IngredientWithinStep } from '../../ingredient-within-step/entities/ingredient-within-step.entity';
 import { StepWithinRecipeExecution } from '../../step-within-recipe-execution/entities/step-within-recipe-execution.entity';
+import {Recipe} from "../../recipe/entities/recipe.entity";
 
 @Entity()
 export class RecipeExecution {
@@ -20,6 +21,9 @@ export class RecipeExecution {
   @Column()
   duration: number;
 
+  @OneToOne(() => Recipe, recipe => recipe.recipeExecution)
+  recipe: number;
+
   @OneToMany(() => IngredientWithinStep, ingredientWithinStep => ingredientWithinStep.recipeExecution)
   ingredients: IngredientWithinStep[];
 
@@ -27,6 +31,6 @@ export class RecipeExecution {
   recipeExecution: StepWithinRecipeExecution[]; //recipeExecution in which it is found
 
   @OneToMany(() => StepWithinRecipeExecution, stepWithinRecipeExecution => stepWithinRecipeExecution.recipeExecution)
-  steps: StepWithinRecipeExecution[]; //if isStep == false, so it's a 'Progression' and it can have many differents steps
+  steps: StepWithinRecipeExecution[]; //if isStep == false, it's a 'Progression' and it can have many different steps
 
 }

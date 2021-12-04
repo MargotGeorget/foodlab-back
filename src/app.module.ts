@@ -1,9 +1,7 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { IngredientController } from './ingredient/ingredient.controller';
 import { IngredientModule } from './ingredient/ingredient.module';
-import {IngredientService} from "./ingredient/ingredient.service";
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Ingredient } from './ingredient/entities/ingredient.entity';
@@ -18,7 +16,11 @@ import { RecipeExecution } from './recipe-execution/entities/recipe-execution.en
 import { StepWithinRecipeExecutionModule } from './step-within-recipe-execution/step-within-recipe-execution.module';
 import { StepWithinRecipeExecution } from './step-within-recipe-execution/entities/step-within-recipe-execution.entity';
 import { RecipeCategoryModule } from './recipe-category/recipe-category.module';
-import {RecipeCategory} from "./recipe-category/entities/recipe-category.entity";
+import { RecipeCategory } from './recipe-category/entities/recipe-category.entity';
+import { RecipeModule } from './recipe/recipe.module';
+import {Recipe} from "./recipe/entities/recipe.entity";
+import { CostDataModule } from './cost-data/cost-data.module';
+import { CostDataModule } from './cost-data/cost-data.module';
 
 @Module({
   imports: [
@@ -31,6 +33,7 @@ import {RecipeCategory} from "./recipe-category/entities/recipe-category.entity"
       },
       entities: [
         Ingredient,
+        Recipe,
         AllergenCategory,
         IngredientCategory,
         IngredientWithinStep,
@@ -50,6 +53,8 @@ import {RecipeCategory} from "./recipe-category/entities/recipe-category.entity"
     RecipeExecutionModule,
     StepWithinRecipeExecutionModule,
     RecipeCategoryModule,
+    RecipeModule,
+    CostDataModule,
   ],
   controllers: [AppController],
   providers: [AppService],
