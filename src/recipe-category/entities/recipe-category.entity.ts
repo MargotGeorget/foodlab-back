@@ -11,5 +11,5 @@ export class RecipeCategory {
     name: string
 
     @OneToMany(() => Recipe, recipe => recipe.recipeCategory)
-    recipe: number;
+    recipes: Recipe[];
 }

@@ -10,7 +10,7 @@ export class AllergenCategory {
   @Column()
   name: String
 
-  // one AllegerCategory is related to many Ingredients
+  // one AllergenCategory is related to many Ingredients
   @OneToMany(() => Ingredient, ingredient => ingredient.allergenCategory)
-  ingredient: number;
+  ingredients: Ingredient[];
 }

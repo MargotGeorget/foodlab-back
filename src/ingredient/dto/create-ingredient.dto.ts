@@ -5,12 +5,17 @@ import { IngredientWithinStep } from '../../ingredient-within-step/entities/ingr
 export class CreateIngredientDto {
 
   @IsString()
-  name: string
+  name: string;
 
   @IsNumber()
-  unitaryPrice: number
+  unitaryPrice: number;
 
   @IsString()
-  unit: string
+  unit: string;
 
+  @IsNumber()
+  allergenCategoryId?: number;
+
+  @IsNumber()
+  ingredientCategoryId: number;
 }

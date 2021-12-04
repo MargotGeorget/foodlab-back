@@ -22,7 +22,7 @@ export class RecipeExecution {
   duration: number;
 
   @OneToOne(() => Recipe, recipe => recipe.recipeExecution)
-  recipe: number;
+  recipe: Recipe;
 
   @OneToMany(() => IngredientWithinStep, ingredientWithinStep => ingredientWithinStep.recipeExecution)
   ingredients: IngredientWithinStep[];

@@ -19,6 +19,6 @@ export class CostData {
     coefWithoutCharges: number;
 
     @OneToMany(() => Recipe, recipe => recipe.costData)
-    recipe: number;
+    recipes: Recipe[];
 
 }

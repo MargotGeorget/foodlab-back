@@ -15,11 +15,11 @@ export class CreateRecipeDto {
     seasoningCost: number;
 
     @IsNumber()
+    recipeExecutionId: number;
+
+    @IsNumber()
     recipeCategoryId: number;
 
     @IsNumber()
     costDataId: number;
-
-    @IsNumber()
-    recipeExecutionId: number;
 }

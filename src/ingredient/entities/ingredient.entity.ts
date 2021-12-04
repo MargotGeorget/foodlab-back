@@ -21,9 +21,9 @@ export class Ingredient {
     steps: IngredientWithinStep[];
 
     // Ingredient will have AllergenCategory's foreign key
-    @ManyToOne(() => AllergenCategory, allergenCategory => allergenCategory.ingredient)
-    allergenCategory: number;
+    @ManyToOne(() => AllergenCategory, allergenCategory => allergenCategory.ingredients)
+    allergenCategory: AllergenCategory;
 
-    @ManyToOne(() => IngredientCategory, ingredientCategory => ingredientCategory.ingredient)
-    ingredientCategory: number;
+    @ManyToOne(() => IngredientCategory, ingredientCategory => ingredientCategory.ingredients)
+    ingredientCategory: IngredientCategory;
 }
