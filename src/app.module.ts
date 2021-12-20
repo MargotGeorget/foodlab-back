@@ -20,7 +20,6 @@ import { RecipeCategory } from './recipe-category/entities/recipe-category.entit
 import { RecipeModule } from './recipe/recipe.module';
 import {Recipe} from "./recipe/entities/recipe.entity";
 import { CostDataModule } from './cost-data/cost-data.module';
-import { CostDataModule } from './cost-data/cost-data.module';
 
 @Module({
   imports: [
