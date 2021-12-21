@@ -1,6 +1,7 @@
-import {Column, OneToMany, PrimaryGeneratedColumn} from "typeorm";
+import {Column, Entity, OneToMany, PrimaryGeneratedColumn} from "typeorm";
 import {Recipe} from "../../recipe/entities/recipe.entity";
 
+@Entity()
 export class CostData {
 
     @PrimaryGeneratedColumn()

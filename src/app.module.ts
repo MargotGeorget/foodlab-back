@@ -20,6 +20,7 @@ import { RecipeCategory } from './recipe-category/entities/recipe-category.entit
 import { RecipeModule } from './recipe/recipe.module';
 import {Recipe} from "./recipe/entities/recipe.entity";
 import { CostDataModule } from './cost-data/cost-data.module';
+import { CostData } from './cost-data/entities/cost-data.entity';
 
 @Module({
   imports: [
@@ -39,7 +40,8 @@ import { CostDataModule } from './cost-data/cost-data.module';
         RecipeExecution,
         StepWithinRecipeExecution,
         IngredientCategory,
-        RecipeCategory
+        RecipeCategory,
+        CostData
       ],
       //entities: ['dist/**/*.entity{.ts,.js}'],
       synchronize: true, // This for development
