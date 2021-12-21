@@ -1,6 +1,5 @@
-import { Column, OneToMany } from 'typeorm';
 import { IsNumber, IsString } from "class-validator";
-import { IngredientWithinStep } from '../../ingredient-within-step/entities/ingredient-within-step.entity';
+import { Optional } from '@nestjs/common';
 
 export class CreateIngredientDto {
 
@@ -14,7 +13,11 @@ export class CreateIngredientDto {
   unit: string;
 
   @IsNumber()
-  allergenCategoryId?: number;
+  stockQuantity: number;
+
+  // @IsNumber()
+  // @Optional()
+  // allergenCategoryId?: number;
 
   @IsNumber()
   ingredientCategoryId: number;

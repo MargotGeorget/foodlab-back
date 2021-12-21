@@ -5,4 +5,5 @@ export class CreateIngredientCategoryDto {
   @IsString()
   name : string;
 
+
 }
