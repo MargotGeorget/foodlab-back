@@ -9,6 +9,7 @@ export class AuthService {
         private jwtService: JwtService
     ) {}
 
+    // Called in the local strategy to check that the provided credentials are correct
     async validateUser(username: string, pass: string): Promise<any> {
         const user = await this.usersService.findOne(username);
         if (user && user.password === pass) {
@@ -18,6 +19,7 @@ export class AuthService {
         return null;
     }
 
+    // Called in the auth/login route to sign a JWT based on a user that provided correct credentials
     async login(user: any) {
         const payload = { username: user.username, sub: user.userId };
         // payload is what will be "hidden" inside the jwt
