@@ -4,7 +4,6 @@ import { AppService } from './app.service';
 import { IngredientModule } from './ingredient/ingredient.module';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Ingredient } from './ingredient/entities/ingredient.entity';
 import { AllergenCategoryModule } from './allergen-category/allergen-category.module';
 import { IngredientCategoryModule } from './ingredient-category/ingredient-category.module';
 import { AllergenCategory } from './allergen-category/entities/allergen-category.entity';
@@ -21,6 +20,7 @@ import { RecipeModule } from './recipe/recipe.module';
 import {Recipe} from "./recipe/entities/recipe.entity";
 import { CostDataModule } from './cost-data/cost-data.module';
 import { CostData } from './cost-data/entities/cost-data.entity';
+import { Ingredient } from './ingredient/entities/ingredient.entity';
 
 @Module({
   imports: [

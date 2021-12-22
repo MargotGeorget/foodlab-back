@@ -11,9 +11,10 @@ export class CreateRecipeDto {
     @IsNumber()
     guestsNumber: number;
 
-    @IsNumber()
-    seasoningCost: number;
+    //@IsNumber()
+    //seasoningCost: number;
 
+    /*
     @IsNumber()
     recipeExecutionId: number;
 
@@ -22,4 +23,5 @@ export class CreateRecipeDto {
 
     @IsNumber()
     costDataId: number;
+    */
 }

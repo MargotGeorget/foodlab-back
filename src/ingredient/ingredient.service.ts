@@ -14,12 +14,14 @@ export class IngredientService {
   ) {}
 
   create(createIngredientDto: CreateIngredientDto) {
+    console.log(createIngredientDto.stockQuantity)
     return this.ingredientRepository.save(createIngredientDto);
   }
 
   findAll() {
-    return this.ingredientRepository.find({});
-   // return new Ingredient("Daurade", 15, "KG");
+    return this.ingredientRepository.find({
+      relations : ["ingredientCategory","allergenCategory"]
+    });
   }
 
   findOne(id: number) {

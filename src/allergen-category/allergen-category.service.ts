@@ -4,6 +4,7 @@ import { UpdateAllergenCategoryDto } from './dto/update-allergen-category.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { AllergenCategory } from './entities/allergen-category.entity';
+import { catchError } from 'rxjs/operators';
 
 @Injectable()
 export class AllergenCategoryService {
