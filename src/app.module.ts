@@ -23,6 +23,8 @@ import { CostDataModule } from './cost-data/cost-data.module';
 import { CostData } from './cost-data/entities/cost-data.entity';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
+import { UserModule } from './user/user.module';
+import {User} from "./user/entities/user.entity";
 
 @Module({
   imports: [
@@ -43,7 +45,8 @@ import { UsersModule } from './users/users.module';
         StepWithinRecipeExecution,
         IngredientCategory,
         RecipeCategory,
-        CostData
+        CostData,
+        User
       ],
       //entities: ['dist/**/*.entity{.ts,.js}'],
       synchronize: true, // This for development
@@ -60,6 +63,7 @@ import { UsersModule } from './users/users.module';
     CostDataModule,
     AuthModule,
     UsersModule,
+    UserModule,
   ],
   controllers: [AppController],
   providers: [AppService],
