@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import {UsersService} from "../users/users.service";
 import {JwtService} from "@nestjs/jwt";
+import {jwtConstants} from "./constants";
 
 @Injectable()
 export class AuthService {
@@ -24,7 +25,7 @@ export class AuthService {
         const payload = { username: user.username, sub: user.userId };
         // payload is what will be "hidden" inside the jwt
         return {
-            access_token: this.jwtService.sign(payload)
+            access_token: this.jwtService.sign(payload, )
         };
     }
 }
