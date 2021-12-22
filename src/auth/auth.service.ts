@@ -1,18 +1,17 @@
 import { Injectable } from '@nestjs/common';
-import {UsersService} from "../users/users.service";
 import {JwtService} from "@nestjs/jwt";
-import {jwtConstants} from "./constants";
+import {UserService} from "../user/user.service";
 
 @Injectable()
 export class AuthService {
     constructor(
-        private usersService: UsersService,
+        private userService: UserService,
         private jwtService: JwtService
     ) {}
 
-    // Called in the local strategy to check that the provided credentials are correct
-    async validateUser(username: string, pass: string): Promise<any> {
-        const user = await this.usersService.findOne(username);
+    // Called in the LocalStrategy by the validate() function
+    async validateUser(email: string, pass: string): Promise<any> {
+        const user = await this.userService.findOneByEmail(email);
         if (user && user.password === pass) {
             const { password, ...result } = user;
             return result;

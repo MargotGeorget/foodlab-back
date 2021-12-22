@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import {getConnection} from "typeorm";
+import {User} from "./entities/user.entity";
 
 @Injectable()
 export class UserService {
@@ -22,11 +23,21 @@ export class UserService {
     return `This action returns all user`;
   }
 
-  findOne(id: number) {
+  findOneById(id: number) {
     return getConnection()
         .createQueryBuilder()
         .select('user')
+        .from(User, 'user')
         .where('user.id = :id', { id: id })
+        .getOne();
+  }
+
+  findOneByEmail(email: string) {
+    return getConnection()
+        .createQueryBuilder()
+        .select('user')
+        .from(User, 'user')
+        .where('user.email = :email', { email: email })
         .getOne();
   }
 
