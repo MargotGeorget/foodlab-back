@@ -21,7 +21,7 @@ export class AuthService {
 
     // Called in the auth/login route to sign a JWT based on a user that provided correct credentials
     async login(user: any) {
-        const payload = { username: user.email, sub: user.id };
+        const payload = { sub: user.id };
         // payload is what will be "hidden" inside the jwt
         return {
             access_token: this.jwtService.sign(payload)
