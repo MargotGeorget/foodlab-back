@@ -11,6 +11,9 @@ export class CreateRecipeDto {
     @IsNumber()
     guestsNumber: number;
 
+    @IsNumber()
+    recipeCategoryId: number;
+
     //@IsNumber()
     //seasoningCost: number;
 

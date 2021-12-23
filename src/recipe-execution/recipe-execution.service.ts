@@ -9,26 +9,40 @@ import { Repository } from 'typeorm';
 export class RecipeExecutionService {
   constructor(
     @InjectRepository(RecipeExecution)
-      private RecipeExecutionRepository: Repository<RecipeExecution>,
+      private recipeExecutionRepository: Repository<RecipeExecution>,
 ) {}
 
   create(createRecipeExecutionDto: CreateRecipeExecutionDto) {
-    return 'This action adds a new recipeExecution';
+    //'This action adds a new recipeExecution'
+    return this.recipeExecutionRepository.save(createRecipeExecutionDto);
   }
 
   findAll() {
-    return `This action returns all recipeExecution`;
+    `This action returns all recipeExecution`
+    return this.recipeExecutionRepository.find({
+      relations: ["ingredients","recipeExecution","steps"]
+    });
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} recipeExecution`;
+    //`This action returns a #${id} recipeExecution`
+    return this.recipeExecutionRepository.findOne({id: id}, {
+      relations: ["ingredients","recipeExecution","steps", "recipe"]
+    });
+  }
+
+
+  findAllInRecipe(idRecipe: number) {
+    //return this.recipeExecutionRepository.find({recipe: idRecipe});
   }
 
   update(id: number, updateRecipeExecutionDto: UpdateRecipeExecutionDto) {
-    return `This action updates a #${id} recipeExecution`;
+    //`This action updates a #${id} recipeExecution`
+    return this.recipeExecutionRepository.update({id: id}, updateRecipeExecutionDto);
   }
 
   remove(id: number) {
-    return `This action removes a #${id} recipeExecution`;
+    //`This action removes a #${id} recipeExecution`
+    return this.recipeExecutionRepository.delete({id: id});
   }
 }

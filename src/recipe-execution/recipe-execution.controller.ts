@@ -22,6 +22,11 @@ export class RecipeExecutionController {
     return this.recipeExecutionService.findOne(+id);
   }
 
+  @Get('recipe/:id')
+  findAllInRecipe(@Param('id') id: string) {
+    return this.recipeExecutionService.findAllInRecipe(+id);
+  }
+
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateRecipeExecutionDto: UpdateRecipeExecutionDto) {
     return this.recipeExecutionService.update(+id, updateRecipeExecutionDto);

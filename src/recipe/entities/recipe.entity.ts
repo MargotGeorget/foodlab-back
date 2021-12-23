@@ -18,6 +18,9 @@ export class Recipe {
     @Column()
     guestsNumber: number;
 
+    @Column()
+    recipeCategoryId: number
+
     // one Recipe related to one RecipeExecution
     @OneToOne(() => RecipeExecution, recipeExecution => recipeExecution.recipe)
     @JoinColumn() // Recipe will have RecipeExecution foreign key
@@ -25,6 +28,7 @@ export class Recipe {
 
     // many Recipes related to one RecipeCategory
     @ManyToOne(() => RecipeCategory, recipeCategory => recipeCategory.recipes)
+    @JoinColumn({name: "recipeCategoryId"})
     recipeCategory: RecipeCategory;
     /*
     Recipe will have RecipeCategory's foreign key

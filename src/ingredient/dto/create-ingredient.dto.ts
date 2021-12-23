@@ -19,6 +19,6 @@ export class CreateIngredientDto {
   // @Optional()
   // allergenCategory?: number;
 
-  //@IsNumber()
-  //ingredientCategory: number;
+  @IsNumber()
+  ingredientCategoryId: number;
 }
