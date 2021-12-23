@@ -14,11 +14,11 @@ export class AppController {
     return this.authService.login(req.user);
   }*/
 
-  @UseGuards(JwtAuthGuard)
+  /*@UseGuards(JwtAuthGuard)
   @Get('profile')
   getProfile(@Request() req) {
     return req.user;
-  }
+  }*/
 
   @Get('token')
   getToken(@Request() req) {

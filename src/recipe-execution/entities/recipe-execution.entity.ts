@@ -15,10 +15,10 @@ export class RecipeExecution {
   @Column()
   stepTitle: string;
 
-  @Column()
+  @Column({ nullable: true })
   stepDescription: string;
 
-  @Column()
+  @Column({ nullable: true })
   duration: number;
 
   @OneToOne(() => Recipe, recipe => recipe.recipeExecution)

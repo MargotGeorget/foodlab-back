@@ -22,7 +22,6 @@ import {Recipe} from "./recipe/entities/recipe.entity";
 import { CostDataModule } from './cost-data/cost-data.module';
 import { CostData } from './cost-data/entities/cost-data.entity';
 import { AuthModule } from './auth/auth.module';
-import { UsersModule } from './users/users.module';
 import { UserModule } from './user/user.module';
 import {User} from "./user/entities/user.entity";
 
@@ -62,7 +61,6 @@ import {User} from "./user/entities/user.entity";
     RecipeModule,
     CostDataModule,
     AuthModule,
-    UsersModule,
     UserModule,
   ],
   controllers: [AppController],
