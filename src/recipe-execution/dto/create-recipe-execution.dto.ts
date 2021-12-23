@@ -8,9 +8,9 @@ export class CreateRecipeExecutionDto {
     @IsString()
     stepTitle?: string; // if recipe execution is not a step it doesn't need a title
 
-    @IsString()
-    stepDescription?: string; // if recipe execution is not a step it doesn't need a description
-
-    @IsNumber()
-    duration?: number; // if recipe execution is not a step, its duration is calculated
+    // @IsString()
+    // stepDescription?: string; // if recipe execution is not a step it doesn't need a description
+    //
+    // @IsNumber()
+    // duration?: number; // if recipe execution is not a step, its duration is calculated
 }

@@ -20,17 +20,16 @@ export class RecipeExecutionService {
   findAll() {
     `This action returns all recipeExecution`
     return this.recipeExecutionRepository.find({
-      relations: ["ingredients","recipeExecution","steps"]
+      relations: ["ingredients"]
     });
   }
 
   findOne(id: number) {
     //`This action returns a #${id} recipeExecution`
     return this.recipeExecutionRepository.findOne({id: id}, {
-      relations: ["ingredients","recipeExecution","steps", "recipe"]
+      relations: ["ingredients", "recipe"]
     });
   }
-
 
   findAllInRecipe(idRecipe: number) {
     //return this.recipeExecutionRepository.find({recipe: idRecipe});

@@ -13,6 +13,9 @@ export class IngredientWithinStep {
   @Column()
   recipeExecutionId: number
 
+  @Column()
+  quantity: number
+
   @ManyToOne(() => Ingredient, ingredient => ingredient.steps)
   @JoinColumn({ name: "ingredientId"})
   ingredient: Ingredient;

@@ -22,7 +22,7 @@ export class IngredientWithinStepController {
     return this.ingredientWithinStepService.findOne(+id);
   }
 
-  @Get('step/:id')
+  @Get('ingredients/:id')
   findAllIngredientsInStep(@Param('id') id: string) {
     return this.ingredientWithinStepService.findAllIngredientsInStep(+id);
   }

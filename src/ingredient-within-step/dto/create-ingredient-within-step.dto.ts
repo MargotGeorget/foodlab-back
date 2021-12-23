@@ -7,4 +7,7 @@ export class CreateIngredientWithinStepDto {
 
     @IsNumber()
     recipeExecutionId: number;
+
+    @IsNumber()
+    quantity: number
 }

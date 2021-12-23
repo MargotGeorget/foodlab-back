@@ -7,28 +7,43 @@ import { Repository } from 'typeorm';
 
 @Injectable()
 export class StepWithinRecipeExecutionService {
-    constructor(
-      @InjectRepository(StepWithinRecipeExecution)
-        private StepWithinRecipeExecutionRepository: Repository<StepWithinRecipeExecution>,
-  ) {}
+  constructor(
+    @InjectRepository(StepWithinRecipeExecution)
+    private stepWithinRecipeExecutionRepository: Repository<StepWithinRecipeExecution>,
+  ) {
+  }
 
   create(createStepWithinRecipeExecutionDto: CreateStepWithinRecipeExecutionDto) {
-    return 'This action adds a new stepWithinRecipeExecution';
+    //This action adds a new stepWithinRecipeExecution'
+    return this.stepWithinRecipeExecutionRepository.save(createStepWithinRecipeExecutionDto);
   }
 
   findAll() {
-    return `This action returns all stepWithinRecipeExecution`;
+    //`This action returns all stepWithinRecipeExecution`
+    return this.stepWithinRecipeExecutionRepository.find();
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} stepWithinRecipeExecution`;
+    //`This action returns a #${id} stepWithinRecipeExecution`
+    return this.stepWithinRecipeExecutionRepository.findOne({ id: id });
+  }
+
+  findAllStepInRecipeExecution(idRecipeExecution: number) {
+    //`This action returns all the steps in a #${id} recipeExecution`
+    return this.stepWithinRecipeExecutionRepository.find({
+      select: ['step', 'number'],
+      where: { recipeExecutionId: idRecipeExecution },
+      relations: ['step'],
+    });
   }
 
   update(id: number, updateStepWithinRecipeExecutionDto: UpdateStepWithinRecipeExecutionDto) {
-    return `This action updates a #${id} stepWithinRecipeExecution`;
+    //`This action updates a #${id} stepWithinRecipeExecution`
+    return this.stepWithinRecipeExecutionRepository.update({ id: id }, updateStepWithinRecipeExecutionDto);
   }
 
   remove(id: number) {
-    return `This action removes a #${id} stepWithinRecipeExecution`;
+    //`This action removes a #${id} stepWithinRecipeExecution`
+    return this.stepWithinRecipeExecutionRepository.delete({ id: id });
   }
 }
