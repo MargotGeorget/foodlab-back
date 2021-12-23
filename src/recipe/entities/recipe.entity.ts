@@ -21,9 +21,15 @@ export class Recipe {
     @Column()
     recipeCategoryId: number
 
+    @Column({nullable: true})
+    recipeExecutionId: number
+
+    @Column({nullable: true})
+    costDataId: number
+
     // one Recipe related to one RecipeExecution
     @OneToOne(() => RecipeExecution, recipeExecution => recipeExecution.recipe)
-    @JoinColumn() // Recipe will have RecipeExecution foreign key
+    @JoinColumn({name : "recipeExecutionId"}) // Recipe will have RecipeExecution foreign key
     recipeExecution: RecipeExecution;
 
     // many Recipes related to one RecipeCategory
@@ -37,5 +43,6 @@ export class Recipe {
 
     // many Recipes related to one CostData
     @ManyToOne(() => CostData, costData => costData.recipes)
+    @JoinColumn({name: "costDataId"})
     costData: CostData;
 }
