@@ -3,6 +3,7 @@ import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import {JwtAuthGuard} from "../auth/guards/jwt-auth.guard";
+import {AdminGuard} from "../auth/guards/admin.guard";
 
 @Controller('user')
 export class UserController {
@@ -13,6 +14,7 @@ export class UserController {
     return this.userService.create(createUserDto);
   }
 
+  //@UseGuards(AdminGuard)
   @Get()
   findAll() {
     return this.userService.findAll();
@@ -24,10 +26,6 @@ export class UserController {
     return this.userService.findOneById(req.user.id);
   }
 
-  /*@Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.userService.findOneById(+id);
-  }*/
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
