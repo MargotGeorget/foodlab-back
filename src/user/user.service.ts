@@ -50,6 +50,10 @@ export class UserService {
   }
 
   remove(id: number) {
-    return `This action removes a #${id} user`;
+    return getConnection()
+        .createQueryBuilder()
+        .delete()
+        .from(User, 'user')
+        .where('user.id = :id', { id: id });
   }
 }
