@@ -21,9 +21,6 @@ export class Ingredient {
     unit: string
 
     @Column()
-    stockQuantity: number
-
-    @Column()
     ingredientCategoryId: number
 
     @OneToMany(() => IngredientWithinStep, ingredientWithinStep => ingredientWithinStep.ingredient)
