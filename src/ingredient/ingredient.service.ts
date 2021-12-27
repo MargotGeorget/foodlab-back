@@ -25,11 +25,13 @@ export class IngredientService {
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} ingredient`;
+    //`This action returns a #${id} ingredient`
+    return this.ingredientRepository.findOne({id: id});
   }
 
   update(id: number, updateIngredientDto: UpdateIngredientDto) {
-    return `This action updates a #${id} ingredient`;
+    //`This action updates a #${id} ingredient`
+    return this.ingredientRepository.update({id: id}, updateIngredientDto);
   }
 
   remove(id: number) {

@@ -14,6 +14,7 @@ export class IngredientWithinStepService {
 
   create(createIngredientWithinStepDto: CreateIngredientWithinStepDto) {
     //'This action adds a new ingredientWithinStep'
+    console.log(createIngredientWithinStepDto);
     return this.ingredientWithinStepRepository.save(createIngredientWithinStepDto);
   }
 

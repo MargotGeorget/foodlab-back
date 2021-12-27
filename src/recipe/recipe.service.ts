@@ -15,6 +15,7 @@ export class RecipeService {
 
   create(createRecipeDto: CreateRecipeDto) {
     //This action adds a new recipe
+    console.log(createRecipeDto)
     return this.recipeRepository.save(createRecipeDto);
   }
 
@@ -27,11 +28,15 @@ export class RecipeService {
 
   findOne(id: number) {
     //`This action returns a #${id} recipe`
-    return this.recipeRepository.findOne({id: id});
+    return this.recipeRepository.findOne({id: id},{
+        relations: ["recipeExecution","recipeCategory"]
+      });
   }
 
   update(id: number, updateRecipeDto: UpdateRecipeDto) {
-    return `This action updates a #${id} recipe`;
+    //`This action updates a #${id} recipe`
+    console.log(updateRecipeDto)
+    return this.recipeRepository.update({id: id}, updateRecipeDto) ;
   }
 
   remove(id: number) {

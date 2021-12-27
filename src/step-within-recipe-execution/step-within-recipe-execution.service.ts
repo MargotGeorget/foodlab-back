@@ -15,6 +15,7 @@ export class StepWithinRecipeExecutionService {
 
   create(createStepWithinRecipeExecutionDto: CreateStepWithinRecipeExecutionDto) {
     //This action adds a new stepWithinRecipeExecution'
+    console.log(createStepWithinRecipeExecutionDto);
     return this.stepWithinRecipeExecutionRepository.save(createStepWithinRecipeExecutionDto);
   }
 
@@ -34,6 +35,17 @@ export class StepWithinRecipeExecutionService {
       select: ['step', 'number'],
       where: { recipeExecutionId: idRecipeExecution },
       relations: ['step'],
+    });
+  }
+
+  findAllProgressionInRecipeExecution(idRecipeExecution: number) {
+    //`This action returns all the steps in a #${id} recipeExecution`
+    return this.stepWithinRecipeExecutionRepository.find({
+      select: ['step', 'number'],
+      relations: ['step'],
+      where: { recipeExecutionId: idRecipeExecution,
+        step:{isStep: false}},
+
     });
   }
 

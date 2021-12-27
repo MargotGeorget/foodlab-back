@@ -28,6 +28,11 @@ export class StepWithinRecipeExecutionController {
     return this.stepWithinRecipeExecutionService.findAllStepInRecipeExecution(+id);
   }
 
+  @Get('progressions/:id')
+  findAllProgressionInRecipeExecution(@Param('id') id: string) {
+    return this.stepWithinRecipeExecutionService.findAllProgressionInRecipeExecution(+id)}
+
+
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateStepWithinRecipeExecutionDto: UpdateStepWithinRecipeExecutionDto) {
     return this.stepWithinRecipeExecutionService.update(+id, updateStepWithinRecipeExecutionDto);
