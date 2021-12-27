@@ -1,4 +1,4 @@
-import {Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn} from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { IngredientWithinStep } from '../../ingredient-within-step/entities/ingredient-within-step.entity';
 import {AllergenCategory} from "../../allergen-category/entities/allergen-category.entity";
 import {IngredientCategory} from "../../ingredient-category/entities/ingredient-category.entity";
@@ -20,6 +20,12 @@ export class Ingredient {
     @Column()
     unit: string
 
+    @Column()
+    stockQuantity: number
+
+    @Column()
+    ingredientCategoryId: number
+
     @OneToMany(() => IngredientWithinStep, ingredientWithinStep => ingredientWithinStep.ingredient)
     steps: IngredientWithinStep[];
 
@@ -28,5 +34,6 @@ export class Ingredient {
     allergenCategory: AllergenCategory;
 
     @ManyToOne(() => IngredientCategory, ingredientCategory => ingredientCategory.ingredients)
+    @JoinColumn({name: "ingredientCategoryId"})
     ingredientCategory: IngredientCategory;
 }

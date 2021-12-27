@@ -5,7 +5,8 @@ import { UpdateStepWithinRecipeExecutionDto } from './dto/update-step-within-rec
 
 @Controller('step-within-recipe-execution')
 export class StepWithinRecipeExecutionController {
-  constructor(private readonly stepWithinRecipeExecutionService: StepWithinRecipeExecutionService) {}
+  constructor(private readonly stepWithinRecipeExecutionService: StepWithinRecipeExecutionService) {
+  }
 
   @Post()
   create(@Body() createStepWithinRecipeExecutionDto: CreateStepWithinRecipeExecutionDto) {
@@ -21,6 +22,16 @@ export class StepWithinRecipeExecutionController {
   findOne(@Param('id') id: string) {
     return this.stepWithinRecipeExecutionService.findOne(+id);
   }
+
+  @Get('steps/:id')
+  findAllStepInRecipeExecution(@Param('id') id: string) {
+    return this.stepWithinRecipeExecutionService.findAllStepInRecipeExecution(+id);
+  }
+
+  @Get('progressions/:id')
+  findAllProgressionInRecipeExecution(@Param('id') id: string) {
+    return this.stepWithinRecipeExecutionService.findAllProgressionInRecipeExecution(+id)}
+
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateStepWithinRecipeExecutionDto: UpdateStepWithinRecipeExecutionDto) {

@@ -5,6 +5,4 @@ export class CreateAllergenCategoryDto {
     @IsString()
     name: string;
 
-    @IsNumber()
-    ingredientId: number;
 }

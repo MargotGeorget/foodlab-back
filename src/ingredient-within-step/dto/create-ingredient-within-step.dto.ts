@@ -1,4 +1,5 @@
 import {IsNumber} from "class-validator";
+import { Column } from 'typeorm';
 
 export class CreateIngredientWithinStepDto {
 
@@ -7,4 +8,8 @@ export class CreateIngredientWithinStepDto {
 
     @IsNumber()
     recipeExecutionId: number;
+
+    @IsNumber()
+    quantity: number
+
 }

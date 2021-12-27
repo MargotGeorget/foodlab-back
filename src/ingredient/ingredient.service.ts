@@ -14,20 +14,24 @@ export class IngredientService {
   ) {}
 
   create(createIngredientDto: CreateIngredientDto) {
+    console.log(createIngredientDto.stockQuantity)
     return this.ingredientRepository.save(createIngredientDto);
   }
 
   findAll() {
-    return this.ingredientRepository.find({});
-   // return new Ingredient("Daurade", 15, "KG");
+    return this.ingredientRepository.find({
+      relations : ["ingredientCategory","allergenCategory"]
+    });
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} ingredient`;
+    //`This action returns a #${id} ingredient`
+    return this.ingredientRepository.findOne({id: id});
   }
 
   update(id: number, updateIngredientDto: UpdateIngredientDto) {
-    return `This action updates a #${id} ingredient`;
+    //`This action updates a #${id} ingredient`
+    return this.ingredientRepository.update({id: id}, updateIngredientDto);
   }
 
   remove(id: number) {
