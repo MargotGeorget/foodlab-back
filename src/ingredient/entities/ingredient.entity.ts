@@ -23,11 +23,15 @@ export class Ingredient {
     @Column()
     ingredientCategoryId: number
 
+    @Column({ nullable: true })
+    allergenCategoryId: number
+
     @OneToMany(() => IngredientWithinStep, ingredientWithinStep => ingredientWithinStep.ingredient)
     steps: IngredientWithinStep[];
 
     // Ingredient will have AllergenCategory's foreign key
     @ManyToOne(() => AllergenCategory, allergenCategory => allergenCategory.ingredients)
+    @JoinColumn({name: "allergenCategoryId"})
     allergenCategory: AllergenCategory;
 
     @ManyToOne(() => IngredientCategory, ingredientCategory => ingredientCategory.ingredients)

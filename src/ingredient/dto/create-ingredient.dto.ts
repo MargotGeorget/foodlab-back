@@ -1,5 +1,5 @@
-import { IsNumber, IsString } from "class-validator";
-import { Optional } from '@nestjs/common';
+import { IsNumber, IsString, IsOptional } from "class-validator";
+import {Optional} from "@nestjs/common";
 
 export class CreateIngredientDto {
 
@@ -15,9 +15,9 @@ export class CreateIngredientDto {
   @IsNumber()
   stockQuantity: number;
 
-  // @IsNumber()
-  // @Optional()
-  // allergenCategory?: number;
+  @IsOptional()
+  @IsNumber()
+  allergenCategoryId?: number;
 
   @IsNumber()
   ingredientCategoryId: number;

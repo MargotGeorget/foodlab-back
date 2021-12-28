@@ -25,8 +25,9 @@ export class IngredientService {
   }
 
   findOne(id: number) {
-    //`This action returns a #${id} ingredient`
-    return this.ingredientRepository.findOne({id: id});
+    return this.ingredientRepository.findOne({ id: id }, {
+      relations: ["ingredientCategory","allergenCategory"]
+    });
   }
 
   update(id: number, updateIngredientDto: UpdateIngredientDto) {
