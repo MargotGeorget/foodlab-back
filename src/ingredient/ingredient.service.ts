@@ -14,7 +14,6 @@ export class IngredientService {
   ) {}
 
   create(createIngredientDto: CreateIngredientDto) {
-    console.log(createIngredientDto.stockQuantity)
     return this.ingredientRepository.save(createIngredientDto);
   }
 
@@ -31,7 +30,6 @@ export class IngredientService {
   }
 
   update(id: number, updateIngredientDto: UpdateIngredientDto) {
-    //`This action updates a #${id} ingredient`
     return this.ingredientRepository.update({id: id}, updateIngredientDto);
   }
 
