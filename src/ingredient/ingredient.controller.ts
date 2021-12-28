@@ -22,6 +22,11 @@ export class IngredientController {
     return this.ingredientService.findOne(+id);
   }
 
+  @Get('category/:id')
+  findManyByCategory(@Param('id') id: string) {
+    return this.ingredientService.findManyByCategory(+id);
+  }
+
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateIngredientDto: UpdateIngredientDto) {
     return this.ingredientService.update(+id, updateIngredientDto);

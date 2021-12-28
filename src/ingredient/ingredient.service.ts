@@ -24,6 +24,13 @@ export class IngredientService {
     });
   }
 
+  findManyByCategory(idCategory: number){
+    return this.ingredientRepository.find({
+      relations: ["ingredientCategory"],
+      where : { ingredientCategoryId : idCategory }
+    })
+  }
+
   findOne(id: number) {
     //`This action returns a #${id} ingredient`
     return this.ingredientRepository.findOne({id: id});
