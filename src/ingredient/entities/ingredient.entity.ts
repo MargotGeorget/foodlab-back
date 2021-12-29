@@ -11,10 +11,10 @@ export class Ingredient {
     @Column()
     name: string
 
-    @Column({ type: 'decimal', nullable: true })
+    @Column({ type: 'decimal'})
     unitaryPrice: number
 
-    @Column({ type: 'decimal', nullable: true })
+    @Column({ type: 'decimal'})
     stockQuantity: number
 
     @Column()
