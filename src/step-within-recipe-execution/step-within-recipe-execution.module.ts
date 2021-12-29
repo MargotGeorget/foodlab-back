@@ -7,6 +7,7 @@ import { StepWithinRecipeExecution } from './entities/step-within-recipe-executi
 @Module({
   imports: [TypeOrmModule.forFeature([StepWithinRecipeExecution])],
   controllers: [StepWithinRecipeExecutionController],
-  providers: [StepWithinRecipeExecutionService]
+  providers: [StepWithinRecipeExecutionService],
+  exports: [StepWithinRecipeExecutionService]
 })
 export class StepWithinRecipeExecutionModule {}

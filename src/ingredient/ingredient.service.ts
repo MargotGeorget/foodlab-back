@@ -23,6 +23,13 @@ export class IngredientService {
     });
   }
 
+  findManyByCategory(idCategory: number){
+    return this.ingredientRepository.find({
+      relations: ["ingredientCategory"],
+      where : { ingredientCategoryId : idCategory }
+    })
+  }
+
   findOne(id: number) {
     return this.ingredientRepository.findOne({ id: id }, {
       relations: ["ingredientCategory","allergenCategory"]

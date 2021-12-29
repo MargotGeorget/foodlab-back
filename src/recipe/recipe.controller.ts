@@ -22,6 +22,11 @@ export class RecipeController {
     return this.recipeService.findOne(+id);
   }
 
+  @Get('category/:id')
+  findManyByCategory(@Param('id') id: string) {
+    return this.recipeService.findManyByCategory(+id);
+  }
+
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateRecipeDto: UpdateRecipeDto) {
     return this.recipeService.update(+id, updateRecipeDto);

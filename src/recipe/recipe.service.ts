@@ -33,6 +33,13 @@ export class RecipeService {
       });
   }
 
+  findManyByCategory(idCategory: number){
+    return this.recipeRepository.find({
+      relations: ["recipeCategory"],
+      where : { recipeCategoryId : idCategory }
+    })
+  }
+
   update(id: number, updateRecipeDto: UpdateRecipeDto) {
     //`This action updates a #${id} recipe`
     console.log(updateRecipeDto)

@@ -27,6 +27,11 @@ export class IngredientWithinStepController {
     return this.ingredientWithinStepService.findAllIngredientsInStep(+id);
   }
 
+  @Get('ingredients-in-recipe/:id')
+  findAllIngredientsInRecipe(@Param('id') id: string) {
+    return this.ingredientWithinStepService.findAllIngredientsInRecipe(+id);
+  }
+
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateIngredientWithinStepDto: UpdateIngredientWithinStepDto) {
     return this.ingredientWithinStepService.update(+id, updateIngredientWithinStepDto);
