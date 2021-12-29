@@ -32,7 +32,7 @@ export class UserController {
     return this.userService.update(+id, updateUserDto);
   }
 
-  //@UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard)
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.userService.remove(+id);

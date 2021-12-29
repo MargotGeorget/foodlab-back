@@ -1,11 +1,19 @@
 import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import {getConnection} from 'typeorm';
+import {getConnection, Repository} from 'typeorm';
 import {User} from "./entities/user.entity";
+import {InjectRepository} from "@nestjs/typeorm";
 
 @Injectable()
 export class UserService {
+
+  // TODO use repository for every request
+  constructor(
+      @InjectRepository(User)
+      private userRepository: Repository<User>
+  ) {
+  }
 
   create(createUserDto: CreateUserDto) {
     // TODO verifs
@@ -50,10 +58,6 @@ export class UserService {
   }
 
   remove(id: number) {
-    return getConnection()
-        .createQueryBuilder()
-        .delete()
-        .from(User, 'user')
-        .where('user.id = :id', { id: id });
+    return this.userRepository.delete({ id: id });
   }
 }
