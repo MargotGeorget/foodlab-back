@@ -11,6 +11,7 @@ import { StepWithinRecipeExecutionModule } from '../step-within-recipe-execution
     StepWithinRecipeExecutionModule],
   controllers: [IngredientWithinStepController],
   providers: [IngredientWithinStepService],
+  exports: [IngredientWithinStepService]
 })
 export class IngredientWithinStepModule {
 }
