@@ -4,12 +4,14 @@ import { UpdateIngredientWithinStepDto } from './dto/update-ingredient-within-st
 import { IngredientWithinStep } from './entities/ingredient-within-step.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { StepWithinRecipeExecutionService } from '../step-within-recipe-execution/step-within-recipe-execution.service';
 
 @Injectable()
 export class IngredientWithinStepService {
   constructor(
+    private stepWithinRecipeExecutionService: StepWithinRecipeExecutionService,
     @InjectRepository(IngredientWithinStep)
-      private ingredientWithinStepRepository: Repository<IngredientWithinStep>,
+      private ingredientWithinStepRepository: Repository<IngredientWithinStep>
 ) {}
 
   create(createIngredientWithinStepDto: CreateIngredientWithinStepDto) {
@@ -35,6 +37,33 @@ export class IngredientWithinStepService {
       where: { recipeExecutionId: id },
       relations: ["ingredient","ingredient.ingredientCategory"]
     });
+  }
+
+  //idRecipeExecution : id de la progression que contient la recette
+  async findAllIngredientsInRecipe(idRecipeExecution:number){
+    let ingredients: IngredientWithinStep[] = [];
+    //On récupère toutes les étapes de la progression
+    let steps = await this.stepWithinRecipeExecutionService.findAllStepInRecipeExecution(idRecipeExecution);
+    //pour chaque étpaes on récupère tout ses ingrédients
+    for(let step of steps) {
+      let newIngredients = await this.ingredientWithinStepRepository.find({
+        relations: ['ingredient'],
+        where: { recipeExecutionId: step.stepId },
+      });
+      //on ajoute tout les ingredients trouver dans notre liste d'ingrédients à retourner
+      for(let ingredient of newIngredients){
+        ingredients.push(ingredient);
+      }
+    }
+    //on récupère toutes les progressions
+    let progressions = await this.stepWithinRecipeExecutionService.findAllProgressionInRecipeExecution(idRecipeExecution);
+    for (let progression of progressions){
+      let otherIngredients = await this.findAllIngredientsInRecipe(progression.stepId);
+      for (let ingredient of otherIngredients) {
+        ingredients.push(ingredient);
+      }
+    }
+    return ingredients;
   }
 
   update(id: number, updateIngredientWithinStepDto: UpdateIngredientWithinStepDto) {
