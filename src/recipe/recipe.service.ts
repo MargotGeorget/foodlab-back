@@ -1,14 +1,18 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateRecipeDto } from './dto/create-recipe.dto';
 import { UpdateRecipeDto } from './dto/update-recipe.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Recipe } from './entities/recipe.entity';
+import { IngredientService } from '../ingredient/ingredient.service';
+import { IngredientWithinStepService } from '../ingredient-within-step/ingredient-within-step.service';
 
 @Injectable()
 export class RecipeService {
 
   constructor(
+    private ingredientService: IngredientService,
+    private ingredientWithinStepService : IngredientWithinStepService,
     @InjectRepository(Recipe)
     private recipeRepository: Repository<Recipe>,
   ) {}
@@ -49,5 +53,38 @@ export class RecipeService {
   remove(id: number) {
     //`This action removes a #${id} recipe`
     return this.recipeRepository.delete({id: id});
+  }
+
+  async sellRecipe(idRecipe: number){
+    //TODO: add verif recipe empty
+    let recipe = await this.findOne(idRecipe);
+
+    //on récupère tout les ingrédients de la recette
+    let ingredients = await this.ingredientWithinStepService.findAllIngredientsInRecipe(recipe.recipeExecutionId );
+    for (let ingredient of ingredients){
+      if(ingredient.quantity > ingredient.ingredient.stockQuantity){
+        //la quantité en stock de l'ingrédient n'est pas suffisante, on ne peut pas vendre la recette
+        throw new HttpException({
+          status : HttpStatus.CONFLICT,
+          error: 'Insufficient  quantity in stock ',
+        }, HttpStatus.CONFLICT);
+        return false;
+      }
+      else {
+        //on diminue la quantité en stock
+        ingredient.ingredient.stockQuantity = ingredient.ingredient.stockQuantity - ingredient.quantity;
+      }
+    }
+    //si on arrive ici sans avoir levé d'erreur Http alors la recette peut être vendu
+    //on actualise alors le stock des ingrédients dans la base de données
+    for (let ingredient of ingredients){
+      await this.ingredientService.update(ingredient.ingredientId, ingredient.ingredient);
+    }
+    return true;
+  }
+
+  //-------------- Management cost --------------
+  getCostIngredient(id: number) {
+
   }
 }
