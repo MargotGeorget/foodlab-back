@@ -5,7 +5,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { CostData } from './entities/cost-data.entity';
 
 @Module({
-
   imports: [TypeOrmModule.forFeature([CostData])],
   controllers: [CostDataController],
   providers: [CostDataService]
