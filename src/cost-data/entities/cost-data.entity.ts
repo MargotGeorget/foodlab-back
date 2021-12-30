@@ -7,16 +7,16 @@ export class CostData {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column()
+    @Column({ type: 'decimal'})
     averageHourlyCost: number;
 
-    @Column()
+    @Column({ type: 'decimal'})
     flatrateHourlyCost: number;
 
-    @Column()
+    @Column({ type: 'decimal'})
     coefWithCharges: number;
 
-    @Column()
+    @Column({ type: 'decimal'})
     coefWithoutCharges: number;
 
     @OneToMany(() => Recipe, recipe => recipe.costData)
