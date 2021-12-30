@@ -6,13 +6,18 @@ import { Repository } from 'typeorm';
 import { Recipe } from './entities/recipe.entity';
 import { IngredientService } from '../ingredient/ingredient.service';
 import { IngredientWithinStepService } from '../ingredient-within-step/ingredient-within-step.service';
+import { StepWithinRecipeExecutionService } from '../step-within-recipe-execution/step-within-recipe-execution.service';
+import { RecipeExecution } from '../recipe-execution/entities/recipe-execution.entity';
+import { RecipeExecutionService } from '../recipe-execution/recipe-execution.service';
 
 @Injectable()
 export class RecipeService {
 
   constructor(
     private ingredientService: IngredientService,
-    private ingredientWithinStepService : IngredientWithinStepService,
+    private ingredientWithinStepService: IngredientWithinStepService,
+    private stepWithinRecipeExecutionService: StepWithinRecipeExecutionService,
+    private recipeExecutionService: RecipeExecutionService,
     @InjectRepository(Recipe)
     private recipeRepository: Repository<Recipe>,
   ) {}
@@ -84,7 +89,25 @@ export class RecipeService {
   }
 
   //-------------- Management cost --------------
-  getCostIngredient(id: number) {
+  async getCostIngredient(id: number) {
+    let recipe = await this.findOne(id);
+    let ingredients = await this.ingredientWithinStepService.findAllIngredientsInRecipe(recipe.recipeExecutionId);
+    let cost = 0;
+    for(let ingredient of ingredients){
+      cost += ingredient.quantity * ingredient.ingredient.unitaryPrice;
+    }
+    return cost;
+  }
 
+  async getDuration(id: number) {
+    let recipe = await this.findOne(id);
+    if(recipe) {
+      return this.recipeExecutionService.getDuration(recipe.recipeExecutionId);
+    }else{
+      throw new HttpException({
+        status : HttpStatus.NOT_FOUND,
+        error: 'No recipe found',
+      }, HttpStatus.NOT_FOUND);
+    }
   }
 }
