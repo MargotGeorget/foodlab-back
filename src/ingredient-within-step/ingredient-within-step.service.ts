@@ -9,10 +9,10 @@ import { StepWithinRecipeExecutionService } from '../step-within-recipe-executio
 @Injectable()
 export class IngredientWithinStepService {
   constructor(
-    private stepWithinRecipeExecutionService: StepWithinRecipeExecutionService,
-    @InjectRepository(IngredientWithinStep)
+      private stepWithinRecipeExecutionService: StepWithinRecipeExecutionService,
+      @InjectRepository(IngredientWithinStep)
       private ingredientWithinStepRepository: Repository<IngredientWithinStep>
-) {}
+  ) {}
 
   create(createIngredientWithinStepDto: CreateIngredientWithinStepDto) {
     //'This action adds a new ingredientWithinStep'
@@ -40,30 +40,60 @@ export class IngredientWithinStepService {
   }
 
   //idRecipeExecution : id de la progression que contient la recette
-  async findAllIngredientsInRecipe(idRecipeExecution:number){
-    let ingredients: IngredientWithinStep[] = [];
+  async findAllIngredientsInRecipe(idRecipeExecution: number) {
+
+    let ingredientsMap = new Map<number, IngredientWithinStep>();
+
     //On récupère toutes les étapes de la progression
     let steps = await this.stepWithinRecipeExecutionService.findAllStepInRecipeExecution(idRecipeExecution);
-    //pour chaque étpaes on récupère tout ses ingrédients
-    for(let step of steps) {
-      let newIngredients = await this.ingredientWithinStepRepository.find({
+
+    //pour chaque étpaes on récupère tous ses ingrédients
+    for (let step of steps) {
+      let stepIngredients = await this.ingredientWithinStepRepository.find({
         relations: ['ingredient'],
         where: { recipeExecutionId: step.stepId },
       });
-      //on ajoute tout les ingredients trouver dans notre liste d'ingrédients à retourner
-      for(let ingredient of newIngredients){
-        ingredients.push(ingredient);
+
+      // pour chaque ingrédient, on ajoute sa quantité à la map
+      for (let ingredient of stepIngredients) {
+        this.addIngredientToMap(ingredient, ingredientsMap);
       }
     }
-    //on récupère toutes les progressions
-    let progressions = await this.stepWithinRecipeExecutionService.findAllProgressionInRecipeExecution(idRecipeExecution);
-    for (let progression of progressions){
-      let otherIngredients = await this.findAllIngredientsInRecipe(progression.stepId);
-      for (let ingredient of otherIngredients) {
-        ingredients.push(ingredient);
+
+    //on récupère toutes
+    let recipeExecutions = await this.stepWithinRecipeExecutionService.findAllProgressionInRecipeExecution(idRecipeExecution);
+
+    // Pour chaque progression on récupère ses ingrédients
+    for (let recipeExecution of recipeExecutions) {
+      let executionIngredients = await this.findAllIngredientsInRecipe(recipeExecution.stepId);
+
+      // pour chaque ingrédient, on ajoute sa quantité à la map
+      for (let ingredient of executionIngredients) {
+        this.addIngredientToMap(ingredient, ingredientsMap);
       }
     }
-    return ingredients;
+
+    return ingredientsMap.values();
+  }
+
+  /**
+   * Adds an ingredient's quantity to an ingredient map.
+   *
+   * @param ingredient
+   * @param ingredientsMap
+   * @private
+   */
+  private addIngredientToMap(ingredient: IngredientWithinStep, ingredientsMap: Map<number, IngredientWithinStep>) {
+    let ingredientId = ingredient.id;
+    if (ingredientsMap.has(ingredientId)) {
+      // The map already contains this ingredient so we increment the ingredient's quantity
+      let currentQuantity = ingredientsMap.get(ingredientId).quantity;
+      let newQuantity = currentQuantity + ingredient.quantity;
+      ingredientsMap.get(ingredientId).quantity = currentQuantity + newQuantity; // increments the ingredient's quantity
+    } else {
+      // The map doesn't contains this ingredient so wa add it
+      ingredientsMap.set(ingredientId, ingredient);
+    }
   }
 
   update(id: number, updateIngredientWithinStepDto: UpdateIngredientWithinStepDto) {

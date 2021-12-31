@@ -60,7 +60,7 @@ export class RecipeService {
     let recipe = await this.findOne(idRecipe);
 
     //on récupère tout les ingrédients de la recette
-    let ingredients = await this.ingredientWithinStepService.findAllIngredientsInRecipe(recipe.recipeExecutionId );
+    let ingredients = await this.ingredientWithinStepService.findAllIngredientsInRecipe(recipe.recipeExecutionId);
     for (let ingredient of ingredients){
       if(ingredient.quantity > ingredient.ingredient.stockQuantity){
         //la quantité en stock de l'ingrédient n'est pas suffisante, on ne peut pas vendre la recette
