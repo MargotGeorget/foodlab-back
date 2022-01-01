@@ -19,7 +19,7 @@ import {AdminStrategy} from "./strategies/admin.strategy";
       })
   ],
   controllers: [AuthController],
-  providers: [AuthService, LocalStrategy, JwtStrategy, AdminStrategy],
+  providers: [AuthService, LocalStrategy, JwtStrategy, AdminStrategy], //AdminStrategy
   exports: [AuthService]
 })
 export class AuthModule {}

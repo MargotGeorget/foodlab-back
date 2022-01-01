@@ -11,7 +11,8 @@ export class UserController {
 
   @UseGuards(AdminGuard)
   @Post()
-  create(@Body() createUserDto: CreateUserDto) {
+  create(@Request() req, @Body() createUserDto: CreateUserDto) {
+    //console.log(req);
     return this.userService.create(createUserDto);
   }
 
@@ -27,6 +28,7 @@ export class UserController {
     return this.userService.findOneById(req.user.id);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     return this.userService.update(+id, updateUserDto);
