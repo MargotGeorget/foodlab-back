@@ -37,6 +37,7 @@ export class IngredientService {
   }
 
   update(id: number, updateIngredientDto: UpdateIngredientDto) {
+    console.log("update ingredient");
     return this.ingredientRepository.update({id: id}, updateIngredientDto);
   }
 

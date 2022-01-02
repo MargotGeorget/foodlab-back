@@ -5,11 +5,13 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { RecipeExecution } from './entities/recipe-execution.entity';
 import { Repository } from 'typeorm';
 import { StepWithinRecipeExecutionService } from '../step-within-recipe-execution/step-within-recipe-execution.service';
+import { IngredientWithinStepService } from '../ingredient-within-step/ingredient-within-step.service';
 
 @Injectable()
 export class RecipeExecutionService {
   constructor(
     private stepWithinRecipeExecutionService: StepWithinRecipeExecutionService,
+    private ingredientWithinStepService: IngredientWithinStepService,
     @InjectRepository(RecipeExecution)
       private recipeExecutionRepository: Repository<RecipeExecution>,
 ) {}
@@ -42,8 +44,14 @@ export class RecipeExecutionService {
     return this.recipeExecutionRepository.update({id: id}, updateRecipeExecutionDto);
   }
 
-  remove(id: number) {
+  async remove(id: number) {
     //`This action removes a #${id} recipeExecution`
+    let ingredientsWithinStep = await this.ingredientWithinStepService.findAllIngredientsInStep(id);
+    console.log(ingredientsWithinStep);
+    for (let ingredientWithinStep of ingredientsWithinStep){
+      console.log("hay");
+      await this.ingredientWithinStepService.remove(ingredientWithinStep.id);
+    }
     return this.recipeExecutionRepository.delete({id: id});
   }
 
@@ -63,6 +71,10 @@ export class RecipeExecutionService {
       progressions.push(await this.findOne(progressionWithinRecipeExecution.stepId));
     }
     return progressions;
+  }
+
+  getAllProgression() {
+    return this.recipeExecutionRepository.find({isStep: false});
   }
 
   //Retourne la durée complète de la recipe execution

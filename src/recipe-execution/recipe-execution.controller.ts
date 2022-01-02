@@ -17,6 +17,11 @@ export class RecipeExecutionController {
     return this.recipeExecutionService.findAll();
   }
 
+  @Get('progressions')
+  findAllProgressions() {
+    return this.recipeExecutionService.getAllProgression();
+  }
+
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.recipeExecutionService.findOne(+id);
