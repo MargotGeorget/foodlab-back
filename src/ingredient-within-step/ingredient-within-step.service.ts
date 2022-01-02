@@ -84,12 +84,14 @@ export class IngredientWithinStepService {
    * @private
    */
   private addIngredientToMap(ingredient: IngredientWithinStep, ingredientsMap: Map<number, IngredientWithinStep>) {
-    let ingredientId = ingredient.id;
+    let ingredientId = ingredient.ingredientId;
     if (ingredientsMap.has(ingredientId)) {
       // The map already contains this ingredient so we increment the ingredient's quantity
       let currentQuantity = ingredientsMap.get(ingredientId).quantity;
       let newQuantity = currentQuantity + ingredient.quantity;
-      ingredientsMap.get(ingredientId).quantity = currentQuantity + newQuantity; // increments the ingredient's quantity
+      let newIngredient = ingredientsMap.get(ingredientId);
+      newIngredient.quantity = newQuantity; // increments the ingredient's quantity
+      ingredientsMap.set(ingredientId, newIngredient);
     } else {
       // The map doesn't contains this ingredient so wa add it
       ingredientsMap.set(ingredientId, ingredient);
