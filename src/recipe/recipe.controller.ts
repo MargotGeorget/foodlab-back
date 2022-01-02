@@ -22,6 +22,16 @@ export class RecipeController {
     return this.recipeService.findOne(+id);
   }
 
+  @Get('duration/:id')
+  getDuration(@Param('id') id: string) {
+    return this.recipeService.getDuration(+id);
+  }
+
+  @Get('ingredient-cost/:id')
+  getCostIngredient(@Param('id') id: string) {
+    return this.recipeService.getCostIngredient(+id);
+  }
+
   @Get('category/:id')
   findManyByCategory(@Param('id') id: string) {
     return this.recipeService.findManyByCategory(+id);
