@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import {forwardRef, Module} from '@nestjs/common';
 import { RecipeService } from './recipe.service';
 import { RecipeController } from './recipe.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -11,12 +11,13 @@ import { RecipeExecutionModule } from '../recipe-execution/recipe-execution.modu
 @Module({
   imports: [TypeOrmModule.forFeature([Recipe]),
     IngredientModule,
-    IngredientWithinStepModule,
+    forwardRef(() => IngredientWithinStepModule),
     StepWithinRecipeExecutionModule,
     RecipeExecutionModule
   ],
   controllers: [RecipeController],
   providers: [RecipeService],
+  exports: [RecipeService]
 })
 export class RecipeModule {
 }
