@@ -32,7 +32,6 @@ export class StepWithinRecipeExecutionService {
   findAllStepInRecipeExecution(idRecipeExecution: number) {
     //`This action returns all the steps in a #${id} recipeExecution`
     return this.stepWithinRecipeExecutionRepository.find({
-      select: ['step', 'number'],
       where: { recipeExecutionId: idRecipeExecution },
       relations: ['step'],
     });

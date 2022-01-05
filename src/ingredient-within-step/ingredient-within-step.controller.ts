@@ -37,6 +37,11 @@ export class IngredientWithinStepController {
     return this.ingredientWithinStepService.update(+id, updateIngredientWithinStepDto);
   }
 
+  @Delete('delete-all-in-a-step/:id')
+  removeAllIngredientWithinAStep(@Param('id') id: string) {
+    return this.ingredientWithinStepService.removeAllIngredientWithinAStep(+id);
+  }
+
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.ingredientWithinStepService.remove(+id);

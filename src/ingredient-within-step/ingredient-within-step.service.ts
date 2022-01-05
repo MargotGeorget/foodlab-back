@@ -100,6 +100,10 @@ export class IngredientWithinStepService {
     return this.ingredientWithinStepRepository.update({id: id}, updateIngredientWithinStepDto);
   }
 
+  removeAllIngredientWithinAStep(id: number){
+    return this.ingredientWithinStepRepository.delete({recipeExecutionId: id});
+  }
+
   remove(id: number) {
     //`This action removes a #${id} ingredientWithinStep`
     return this.ingredientWithinStepRepository.delete({id: id});
