@@ -2,6 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, Put } from '@nestjs/
 import { RecipeService } from './recipe.service';
 import { CreateRecipeDto } from './dto/create-recipe.dto';
 import { UpdateRecipeDto } from './dto/update-recipe.dto';
+import { Ingredient } from '../ingredient/entities/ingredient.entity';
 
 @Controller('recipe')
 export class RecipeController {
@@ -30,6 +31,11 @@ export class RecipeController {
   @Get('ingredient-cost/:id')
   getCostIngredient(@Param('id') id: string) {
     return this.recipeService.getCostIngredient(+id);
+  }
+
+  @Get('ingredients-in-recipe/:id')
+  async findAllIngredientsInRecipe(@Param('id') id: string) {
+    return this.recipeService.findAllIngredientInRecipe(+id);
   }
 
   @Get('category/:id')

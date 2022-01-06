@@ -2,6 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { RecipeExecutionService } from './recipe-execution.service';
 import { CreateRecipeExecutionDto } from './dto/create-recipe-execution.dto';
 import { UpdateRecipeExecutionDto } from './dto/update-recipe-execution.dto';
+import { Ingredient } from '../ingredient/entities/ingredient.entity';
 
 @Controller('recipe-execution')
 export class RecipeExecutionController {

@@ -9,8 +9,7 @@ import {Ingredient} from "../ingredient/entities/ingredient.entity";
 @Controller('ingredient-within-step')
 export class IngredientWithinStepController {
   constructor(
-      private readonly ingredientWithinStepService: IngredientWithinStepService,
-      private readonly recipeService: RecipeService
+      private readonly ingredientWithinStepService: IngredientWithinStepService
   ) {}
 
   @Post()
@@ -31,18 +30,6 @@ export class IngredientWithinStepController {
   @Get('ingredients/:id')
   findAllIngredientsInStep(@Param('id') id: string) {
     return this.ingredientWithinStepService.findAllIngredientsInStep(+id);
-  }
-
-  @Get('ingredients-in-recipe/:id')
-  async findAllIngredientsInRecipe(@Param('id') id: string) {
-    let recipe = await this.recipeService.findOne(+id);
-    let recipeExecutionId = recipe.recipeExecutionId;
-    let ingredientsIterator = await this.ingredientWithinStepService.findAllIngredientsInRecipe(recipeExecutionId);
-    let ingredients: Ingredient[] = [];
-    for (let ingredient of ingredientsIterator) {
-      ingredients.push(ingredient.ingredient);
-    }
-    return ingredients;
   }
 
   @Patch(':id')

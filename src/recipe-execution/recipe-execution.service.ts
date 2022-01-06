@@ -6,6 +6,7 @@ import { RecipeExecution } from './entities/recipe-execution.entity';
 import { Repository } from 'typeorm';
 import { StepWithinRecipeExecutionService } from '../step-within-recipe-execution/step-within-recipe-execution.service';
 import { IngredientWithinStepService } from '../ingredient-within-step/ingredient-within-step.service';
+import { IngredientWithinStep } from '../ingredient-within-step/entities/ingredient-within-step.entity';
 
 @Injectable()
 export class RecipeExecutionService {
@@ -89,5 +90,61 @@ export class RecipeExecutionService {
       duration += await this.getDuration(progression.id);
     }
     return duration;
+  }
+
+  //idRecipeExecution : id de la progression que contient la recette
+  async findAllIngredientsInRecipe(idRecipeExecution: number) {
+
+    let ingredientsMap = new Map<number, IngredientWithinStep>();
+
+    //On récupère toutes les étapes de la progression
+    let steps = await this.stepWithinRecipeExecutionService.findAllStepInRecipeExecution(idRecipeExecution);
+
+    //pour chaque étpaes on récupère tous ses ingrédients
+    for (let step of steps) {
+      let stepIngredients = await this.ingredientWithinStepService.findAllIngredientsInStep2(step.id);
+
+      // pour chaque ingrédient, on ajoute sa quantité à la map
+      for (let ingredient of stepIngredients) {
+        this.addIngredientToMap(ingredient, ingredientsMap);
+      }
+    }
+
+    //on récupère toutes
+    let recipeExecutions = await this.stepWithinRecipeExecutionService.findAllProgressionInRecipeExecution(idRecipeExecution);
+
+    // Pour chaque progression on récupère ses ingrédients
+    for (let recipeExecution of recipeExecutions) {
+      let executionIngredients = await this.findAllIngredientsInRecipe(recipeExecution.stepId);
+
+      // pour chaque ingrédient, on ajoute sa quantité à la map
+      for (let ingredient of executionIngredients) {
+        this.addIngredientToMap(ingredient, ingredientsMap);
+      }
+    }
+
+    return ingredientsMap.values();
+  }
+
+  /**
+   * Adds an ingredient's quantity to an ingredient map.
+   *
+   * @param ingredient
+   * @param ingredientsMap
+   * @private
+   */
+  private addIngredientToMap(ingredient: IngredientWithinStep, ingredientsMap: Map<number, IngredientWithinStep>) {
+    let ingredientId = ingredient.ingredientId;
+    if (ingredientsMap.has(ingredientId)) {
+      // The map already contains this ingredient so we increment the ingredient's quantity
+      let currentQuantity = ingredientsMap.get(ingredientId).quantity;
+      let newQuantity = currentQuantity + ingredient.quantity;
+      let newIngredient = ingredientsMap.get(ingredientId);
+      newIngredient.quantity = newQuantity; // increments the ingredient's quantity
+      ingredientsMap.set(ingredientId, newIngredient);
+    } else {
+      // The map doesn't contains this ingredient so wa add it
+      ingredientsMap.set(ingredientId, ingredient);
+    }
   }
 }

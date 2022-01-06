@@ -9,6 +9,7 @@ import { IngredientWithinStepService } from '../ingredient-within-step/ingredien
 import { StepWithinRecipeExecutionService } from '../step-within-recipe-execution/step-within-recipe-execution.service';
 import { RecipeExecution } from '../recipe-execution/entities/recipe-execution.entity';
 import { RecipeExecutionService } from '../recipe-execution/recipe-execution.service';
+import { Ingredient } from '../ingredient/entities/ingredient.entity';
 
 @Injectable()
 export class RecipeService {
@@ -49,6 +50,17 @@ export class RecipeService {
     })
   }
 
+  async findAllIngredientInRecipe(id: number){
+    let recipe = await this.findOne(id);
+    let recipeExecutionId = recipe.recipeExecutionId;
+    let ingredientsIterator = await this.recipeExecutionService.findAllIngredientsInRecipe(recipeExecutionId);
+    let ingredients: Ingredient[] = [];
+    for (let ingredient of ingredientsIterator) {
+      ingredients.push(ingredient.ingredient);
+    }
+    return ingredients;
+  }
+
   update(id: number, updateRecipeDto: UpdateRecipeDto) {
     //`This action updates a #${id} recipe`
     console.log(updateRecipeDto)
@@ -65,7 +77,7 @@ export class RecipeService {
     let recipe = await this.findOne(idRecipe);
 
     //on récupère tout les ingrédients de la recette
-    let ingredients = await this.ingredientWithinStepService.findAllIngredientsInRecipe(recipe.recipeExecutionId);
+    let ingredients = await this.recipeExecutionService.findAllIngredientsInRecipe(recipe.recipeExecutionId);
     for (let ingredient of ingredients){
       if(ingredient.quantity > ingredient.ingredient.stockQuantity){
         //la quantité en stock de l'ingrédient n'est pas suffisante, on ne peut pas vendre la recette
@@ -91,7 +103,7 @@ export class RecipeService {
   //-------------- Management cost --------------
   async getCostIngredient(id: number) {
     let recipe = await this.findOne(id);
-    let ingredients = await this.ingredientWithinStepService.findAllIngredientsInRecipe(recipe.recipeExecutionId);
+    let ingredients = await this.recipeExecutionService.findAllIngredientsInRecipe(recipe.recipeExecutionId);
     let cost = 0;
     for(let ingredient of ingredients){
       cost += ingredient.quantity * ingredient.ingredient.unitaryPrice;

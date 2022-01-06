@@ -8,9 +8,7 @@ import { StepWithinRecipeExecutionModule } from '../step-within-recipe-execution
 import {RecipeModule} from "../recipe/recipe.module";
 
 @Module({
-  imports: [TypeOrmModule.forFeature([IngredientWithinStep]),
-    StepWithinRecipeExecutionModule,
-  forwardRef(() => RecipeModule)],
+  imports: [TypeOrmModule.forFeature([IngredientWithinStep])],
   controllers: [IngredientWithinStepController],
   providers: [IngredientWithinStepService],
   exports: [IngredientWithinStepService]
