@@ -34,7 +34,6 @@ export class StepWithinRecipeExecutionController {
 
   @Patch('update-all')
   updateAllStepsWithinRecipeExecution(@Body() updateStepsWithinRecipeExecutionDto: UpdateStepWithinRecipeExecutionDto[]){
-    console.log(updateStepsWithinRecipeExecutionDto);
     //Vérifier qu'aucune valeur number soit supérieur au nombre de valeur
     let valid = updateStepsWithinRecipeExecutionDto.every(step =>
       step.number <= updateStepsWithinRecipeExecutionDto.length);
@@ -46,18 +45,15 @@ export class StepWithinRecipeExecutionController {
     }
     let res = [];
     if (valid){
-      console.log("dans la if");
       for(let updateStepWithinRecipeExecutionDto of updateStepsWithinRecipeExecutionDto){
         res.push(this.stepWithinRecipeExecutionService.update(updateStepWithinRecipeExecutionDto.id, updateStepWithinRecipeExecutionDto))
       }
     } else {
-      console.log("dans le else");
       throw new HttpException({
         status : HttpStatus.CONFLICT,
         error: 'Number of step must be different and between 1 and ' + updateStepsWithinRecipeExecutionDto.length,
       }, HttpStatus.CONFLICT);
     }
-    console.log(res);
     return res;
   }
 

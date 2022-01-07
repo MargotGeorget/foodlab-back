@@ -13,10 +13,18 @@ export class StepWithinRecipeExecutionService {
   ) {
   }
 
-  create(createStepWithinRecipeExecutionDto: CreateStepWithinRecipeExecutionDto) {
+  async create(createStepWithinRecipeExecutionDto: CreateStepWithinRecipeExecutionDto) {
     //This action adds a new stepWithinRecipeExecution'
     console.log(createStepWithinRecipeExecutionDto);
-    return this.stepWithinRecipeExecutionRepository.save(createStepWithinRecipeExecutionDto);
+    let steps = await this.findAllStepInRecipeExecution(
+      createStepWithinRecipeExecutionDto.recipeExecutionId
+    )
+    let nbOfSteps = steps.length + 1;
+    return this.stepWithinRecipeExecutionRepository.save({
+      stepId: createStepWithinRecipeExecutionDto.stepId,
+      recipeExecutionId: createStepWithinRecipeExecutionDto.recipeExecutionId,
+      number: nbOfSteps
+    });
   }
 
   findAll() {

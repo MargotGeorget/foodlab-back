@@ -1,4 +1,5 @@
 import {IsNumber} from "class-validator";
+import { Optional } from '@nestjs/common';
 
 export class CreateStepWithinRecipeExecutionDto {
 
@@ -8,6 +9,8 @@ export class CreateStepWithinRecipeExecutionDto {
     @IsNumber()
     stepId: number;
 
-    @IsNumber()
-    number: number;
+    // @IsNumber()
+    // @Optional()
+    // number: number;
+
 }

@@ -3,4 +3,6 @@ import { CreateStepWithinRecipeExecutionDto } from './create-step-within-recipe-
 
 export class UpdateStepWithinRecipeExecutionDto extends PartialType(CreateStepWithinRecipeExecutionDto) {
   id: number
+
+  number: number;
 }
