@@ -27,16 +27,17 @@ export class IngredientWithinStepController {
     return this.ingredientWithinStepService.findOne(+id);
   }
 
-  @Get('ingredients/:id')
-  findAllIngredientsInStep(@Param('id') id: string) {
-    return this.ingredientWithinStepService.findAllIngredientsInStep(+id);
-  }
+  // @Get('ingredients/:id')
+  // findAllIngredientsInStep(@Param('id') id: string) {
+  //   return this.ingredientWithinStepService.findAllIngredientsInStep(+id);
+  // }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateIngredientWithinStepDto: UpdateIngredientWithinStepDto) {
     return this.ingredientWithinStepService.update(+id, updateIngredientWithinStepDto);
   }
 
+  //TODO : déplacer
   @Delete('delete-all-in-a-step/:id')
   removeAllIngredientWithinAStep(@Param('id') id: string) {
     return this.ingredientWithinStepService.removeAllIngredientWithinAStep(+id);

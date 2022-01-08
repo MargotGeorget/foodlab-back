@@ -28,10 +28,10 @@ export class IngredientWithinStepService {
     return this.ingredientWithinStepRepository.findOne({id: id});
   }
 
-  findAllIngredientsInStep(id: number) {
+  findAllIngredientsInSimpleStep(simpleStepId: number) {
     //`This action returns all the ingredients in a #${id} step`
     return this.ingredientWithinStepRepository.find({
-      where: { recipeExecutionId: id },
+      where: { recipeExecutionId: simpleStepId },
       relations: ["ingredient","ingredient.ingredientCategory"]
     });
   }

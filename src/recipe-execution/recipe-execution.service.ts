@@ -46,15 +46,13 @@ export class RecipeExecutionService {
     return this.recipeExecutionRepository.update({id: id}, updateRecipeExecutionDto);
   }
 
-  async remove(id: number) {
+  async removeSimpleStep(simpleStepId: number) {
     //`This action removes a #${id} recipeExecution`
-    let ingredientsWithinStep = await this.ingredientWithinStepService.findAllIngredientsInStep(id);
-    console.log(ingredientsWithinStep);
+    let ingredientsWithinStep = await this.findAllIngredientsWithinAStepInSimpleStep(simpleStepId);
     for (let ingredientWithinStep of ingredientsWithinStep){
-      console.log("hay");
       await this.ingredientWithinStepService.remove(ingredientWithinStep.id);
     }
-    return this.recipeExecutionRepository.delete({id: id});
+    return this.recipeExecutionRepository.delete({id: simpleStepId});
   }
 
 /*  async getAllStepsInRecipeExecution(id: number) {
@@ -165,5 +163,23 @@ export class RecipeExecutionService {
   updateStepsOrderOfRecipeExecution(@Body() updateStepsWithinRecipeExecutionDto: UpdateStepWithinRecipeExecutionDto[]){
     return this.stepWithinRecipeExecutionService.updateStepsOrderOfRecipeExecution(updateStepsWithinRecipeExecutionDto);
   }
+
+  findAllIngredientsWithinAStepInSimpleStep(simpleStepId: number) {
+    return this.ingredientWithinStepService.findAllIngredientsInSimpleStep(simpleStepId);
+  }
+
+  //Objectif: retourner tout les ingrédients contenu dans les etapes d'une recette qui ne sont pas des progressions.
+  async findAllIngredientsWithinAStepInSimpleStepsInRecipeExecution(recipeExecutionId: number) {
+    let ingredientsWithinAStepsRes: IngredientWithinStep[] = [];
+    let simpleSteps = await this.findAllSimpleStepInRecipeExecution(recipeExecutionId);
+    for (let simpleStep of simpleSteps){
+      let ingredientsWithinStepTmp = await this.findAllIngredientsWithinAStepInSimpleStep(simpleStep.stepId);
+      for (let ingredientWithinAStep of ingredientsWithinStepTmp){
+        ingredientsWithinAStepsRes.push(ingredientWithinAStep);
+      }
+    }
+    return ingredientsWithinAStepsRes;
+  }
+
 
 }

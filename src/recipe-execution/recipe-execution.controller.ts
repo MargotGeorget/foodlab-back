@@ -33,14 +33,22 @@ export class RecipeExecutionController {
     return this.recipeExecutionService.findAllInRecipe(+id);
   }
 
-  /*@Patch(':id')
+  //-------------- Structure refactoring --------------
+  @Patch('update-steps-order')
+  updateStepsOrderOfRecipeExecution(@Body() updateStepsWithinRecipeExecutionDto: UpdateStepWithinRecipeExecutionDto[]){
+    return this.recipeExecutionService.updateStepsOrderOfRecipeExecution(updateStepsWithinRecipeExecutionDto);
+  }
+  //-------------- End of structure refactoring --------------
+
+  @Patch(':id')
   update(@Param('id') id: string, @Body() updateRecipeExecutionDto: UpdateRecipeExecutionDto) {
     return this.recipeExecutionService.update(+id, updateRecipeExecutionDto);
-  }*/
+  }
 
+  //TODO : renommer parce que on utilise différente fonciton remove pour simple step et recipeExecution
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.recipeExecutionService.remove(+id);
+    return this.recipeExecutionService.removeSimpleStep(+id);
   }
 
   //-------------- Structure refactoring --------------
@@ -54,10 +62,16 @@ export class RecipeExecutionController {
     return this.recipeExecutionService.findAllProgressionInRecipeExecution(+id);
   }
 
-  @Patch('update-steps-order')
-  updateStepsOrderOfRecipeExecution(@Body() updateStepsWithinRecipeExecutionDto: UpdateStepWithinRecipeExecutionDto[]){
-    return this.recipeExecutionService.updateStepsOrderOfRecipeExecution(updateStepsWithinRecipeExecutionDto);
+  @Get('all-ingredients-within-a-step-in-simple-step/:id')
+  findAllIngredientsWithinAStepInSimpleStep(@Param('id') id: string) {
+    return this.recipeExecutionService.findAllIngredientsWithinAStepInSimpleStep(+id);
   }
+
+  @Get('all-ingredients-within-a-step-in-simple-steps-in-recipe-execution/:id')
+  findAllIngredientsWithinAStepInSimpleStepsInRecipeExecution(@Param('id') id: string) {
+    return this.recipeExecutionService.findAllIngredientsWithinAStepInSimpleStepsInRecipeExecution(+id);
+  }
+
 
 
 }
