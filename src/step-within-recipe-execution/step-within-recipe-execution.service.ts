@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { Body, HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateStepWithinRecipeExecutionDto } from './dto/create-step-within-recipe-execution.dto';
 import { UpdateStepWithinRecipeExecutionDto } from './dto/update-step-within-recipe-execution.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -43,7 +43,7 @@ export class StepWithinRecipeExecutionService {
       } else {
 
         //On récupère le nombre d'étape dajà présent dans la recette pour trouver le number de la recette
-        let steps = await this.findAllStepInRecipeExecution(
+        let steps = await this.findAllSimpleStepInRecipeExecution(
           createStepWithinRecipeExecutionDto.recipeExecutionId,
         );
         let nbOfSteps = steps.length + 1;
@@ -66,7 +66,7 @@ export class StepWithinRecipeExecutionService {
     return this.stepWithinRecipeExecutionRepository.findOne({ id: id });
   }
 
-  findAllStepInRecipeExecution(idRecipeExecution: number) {
+  findAllSimpleStepInRecipeExecution(idRecipeExecution: number) {
     //`This action returns all the steps in a #${id} recipeExecution`
     return this.stepWithinRecipeExecutionRepository.find({
       where: { recipeExecutionId: idRecipeExecution },
@@ -88,6 +88,31 @@ export class StepWithinRecipeExecutionService {
   update(id: number, updateStepWithinRecipeExecutionDto: UpdateStepWithinRecipeExecutionDto) {
     //`This action updates a #${id} stepWithinRecipeExecution`
     return this.stepWithinRecipeExecutionRepository.update({ id: id }, updateStepWithinRecipeExecutionDto);
+  }
+
+  //TODO: ne pas prendre l'id de la table mais stepId et recipeExecutionId
+  updateAllStepsWithinRecipeExecution(@Body() updateStepsWithinRecipeExecutionDto: UpdateStepWithinRecipeExecutionDto[]){
+    //Vérifier qu'aucune valeur number soit supérieur au nombre de valeur
+    let valid = updateStepsWithinRecipeExecutionDto.every(step =>
+      step.number <= updateStepsWithinRecipeExecutionDto.length && step.number>0);
+    //Vérifier que toutes les valeurs sont différentes
+    if (valid) {
+      valid = updateStepsWithinRecipeExecutionDto.every(data1 =>
+        updateStepsWithinRecipeExecutionDto.every((data2) =>
+          data1 === data2 || data1.number != data2.number));
+    }
+    let res = [];
+    if (valid){
+      for(let updateStepWithinRecipeExecutionDto of updateStepsWithinRecipeExecutionDto){
+        res.push(this.update(updateStepWithinRecipeExecutionDto.id, updateStepWithinRecipeExecutionDto))
+      }
+    } else {
+      throw new HttpException({
+        status : HttpStatus.CONFLICT,
+        error: 'Number of step must be different and between 1 and ' + updateStepsWithinRecipeExecutionDto.length,
+      }, HttpStatus.CONFLICT);
+    }
+    return res;
   }
 
   remove(id: number) {

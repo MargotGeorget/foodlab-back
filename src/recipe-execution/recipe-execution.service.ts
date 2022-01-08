@@ -56,7 +56,7 @@ export class RecipeExecutionService {
     return this.recipeExecutionRepository.delete({id: id});
   }
 
-  async getAllStepsInRecipeExecution(id: number) {
+/*  async getAllStepsInRecipeExecution(id: number) {
     let steps: RecipeExecution[] = [];
     let stepsWithinRecipeExecution = await this.stepWithinRecipeExecutionService.findAllStepInRecipeExecution(id);
     for(let stepWithinRecipeExecution of stepsWithinRecipeExecution){
@@ -72,7 +72,7 @@ export class RecipeExecutionService {
       progressions.push(await this.findOne(progressionWithinRecipeExecution.stepId));
     }
     return progressions;
-  }
+  }*/
 
   getAllProgression() {
     return this.recipeExecutionRepository.find({isStep: false});
@@ -81,24 +81,25 @@ export class RecipeExecutionService {
   //Retourne la durée complète de la recipe execution
   async getDuration(id: number) {
     let duration = 0;
-    let steps = await this.getAllStepsInRecipeExecution(id);
-    for(let step of steps){
-      duration += step.duration;
+    let stepsWithinRecipeExecution = await this.findAllSimpleStepInRecipeExecution(id);
+    for(let stepWithinRecipeExecution of stepsWithinRecipeExecution){
+      duration += stepWithinRecipeExecution.step.duration;
     }
-    let progressions = await this.getAllProgressionInRecipeExecution(id);
-    for(let progression of progressions){
-      duration += await this.getDuration(progression.id);
+    let recipeExecutionsWithinRecipeExecution = await this.findAllProgressionInRecipeExecution(id);
+    for(let recipeExecutionWithinRecipeExecution of recipeExecutionsWithinRecipeExecution){
+      duration += await this.getDuration(recipeExecutionWithinRecipeExecution.stepId);
     }
     return duration;
   }
 
   //idRecipeExecution : id de la progression que contient la recette
-  async findAllIngredientsInRecipe(idRecipeExecution: number) {
+  //TODO: rename function with recipeExecution
+  async findAllIngredientsInRecipe(recipeExecutionId: number) {
 
     let ingredientsMap = new Map<number, IngredientWithinStep>();
 
     //On récupère toutes les étapes de la progression
-    let steps = await this.stepWithinRecipeExecutionService.findAllStepInRecipeExecution(idRecipeExecution);
+    let steps = await this.findAllSimpleStepInRecipeExecution(recipeExecutionId);
 
     //pour chaque étpaes on récupère tous ses ingrédients
     for (let step of steps) {
@@ -111,7 +112,8 @@ export class RecipeExecutionService {
     }
 
     //on récupère toutes
-    let recipeExecutions = await this.stepWithinRecipeExecutionService.findAllProgressionInRecipeExecution(idRecipeExecution);
+    //TODO: cheks que ça na rien cassé
+    let recipeExecutions = await this.findAllProgressionInRecipeExecution(recipeExecutionId);
 
     // Pour chaque progression on récupère ses ingrédients
     for (let recipeExecution of recipeExecutions) {
@@ -147,4 +149,15 @@ export class RecipeExecutionService {
       ingredientsMap.set(ingredientId, ingredient);
     }
   }
+
+  //-------------- Structure refactoring --------------
+  findAllSimpleStepInRecipeExecution(recipeExecutionId: number) {
+    return this.stepWithinRecipeExecutionService.findAllSimpleStepInRecipeExecution(recipeExecutionId);
+  }
+
+  //TODO: refactor progression
+  findAllProgressionInRecipeExecution(recipeExecutionId: number) {
+    return this.stepWithinRecipeExecutionService.findAllProgressionInRecipeExecution(recipeExecutionId);
+  }
+
 }

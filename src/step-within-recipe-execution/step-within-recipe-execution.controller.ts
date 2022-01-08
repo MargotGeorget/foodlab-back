@@ -23,16 +23,17 @@ export class StepWithinRecipeExecutionController {
     return this.stepWithinRecipeExecutionService.findOne(+id);
   }
 
-  @Get('steps/:id')
-  findAllStepInRecipeExecution(@Param('id') id: string) {
-    return this.stepWithinRecipeExecutionService.findAllStepInRecipeExecution(+id);
-  }
+  // @Get('steps/:id')
+  // findAllStepInRecipeExecution(@Param('id') id: string) {
+  //   return this.stepWithinRecipeExecutionService.findAllStepInRecipeExecution(+id);
+  // }
+  //
+  // @Get('progressions/:id')
+  // findAllProgressionInRecipeExecution(@Param('id') id: string) {
+  //   return this.stepWithinRecipeExecutionService.findAllProgressionInRecipeExecution(+id)}
 
-  @Get('progressions/:id')
-  findAllProgressionInRecipeExecution(@Param('id') id: string) {
-    return this.stepWithinRecipeExecutionService.findAllProgressionInRecipeExecution(+id)}
-
-  @Patch('update-all')
+  //TODO: placer dans le service
+/*  @Patch('update-all')
   updateAllStepsWithinRecipeExecution(@Body() updateStepsWithinRecipeExecutionDto: UpdateStepWithinRecipeExecutionDto[]){
     //Vérifier qu'aucune valeur number soit supérieur au nombre de valeur
     let valid = updateStepsWithinRecipeExecutionDto.every(step =>
@@ -55,7 +56,7 @@ export class StepWithinRecipeExecutionController {
       }, HttpStatus.CONFLICT);
     }
     return res;
-  }
+  }*/
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateStepWithinRecipeExecutionDto: UpdateStepWithinRecipeExecutionDto) {

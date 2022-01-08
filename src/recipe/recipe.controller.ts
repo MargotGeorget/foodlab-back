@@ -38,6 +38,11 @@ export class RecipeController {
     return this.recipeService.findAllIngredientInRecipe(+id);
   }
 
+  @Get('ingredients-within-step-in-recipe/:id')
+  async findAllIngredientsWithinStepInRecipe(@Param('id') id: string) {
+    return this.recipeService.findAllIngredientsWithinStepInRecipe(+id);
+  }
+
   @Get('category/:id')
   findManyByCategory(@Param('id') id: string) {
     return this.recipeService.findManyByCategory(+id);

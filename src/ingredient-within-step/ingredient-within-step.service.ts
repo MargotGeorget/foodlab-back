@@ -15,7 +15,6 @@ export class IngredientWithinStepService {
 
   create(createIngredientWithinStepDto: CreateIngredientWithinStepDto) {
     //'This action adds a new ingredientWithinStep'
-    console.log(createIngredientWithinStepDto);
     return this.ingredientWithinStepRepository.save(createIngredientWithinStepDto);
   }
 
@@ -36,13 +35,14 @@ export class IngredientWithinStepService {
       relations: ["ingredient","ingredient.ingredientCategory"]
     });
   }
+
+  //TODO: comprendre doublon
   findAllIngredientsInStep2(id: number) {
     return this.ingredientWithinStepRepository.find({
       relations: ['ingredient'],
       where: { recipeExecutionId: id },
     });
   }
-
 
   update(id: number, updateIngredientWithinStepDto: UpdateIngredientWithinStepDto) {
     //`This action updates a #${id} ingredientWithinStep`

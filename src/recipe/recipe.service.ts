@@ -10,6 +10,7 @@ import { StepWithinRecipeExecutionService } from '../step-within-recipe-executio
 import { RecipeExecution } from '../recipe-execution/entities/recipe-execution.entity';
 import { RecipeExecutionService } from '../recipe-execution/recipe-execution.service';
 import { Ingredient } from '../ingredient/entities/ingredient.entity';
+import { IngredientWithinStep } from '../ingredient-within-step/entities/ingredient-within-step.entity';
 
 @Injectable()
 export class RecipeService {
@@ -61,6 +62,17 @@ export class RecipeService {
     return ingredients;
   }
 
+  async findAllIngredientsWithinStepInRecipe(id: number){
+    let recipe = await this.findOne(id);
+    let recipeExecutionId = recipe.recipeExecutionId;
+    let ingredientsIterator = await this.recipeExecutionService.findAllIngredientsInRecipe(recipeExecutionId);
+    let ingredientsWithinStep: IngredientWithinStep[] = [];
+    for (let ingredient of ingredientsIterator) {
+      ingredientsWithinStep.push(ingredient);
+    }
+    return ingredientsWithinStep;
+  }
+
   update(id: number, updateRecipeDto: UpdateRecipeDto) {
     //`This action updates a #${id} recipe`
     console.log(updateRecipeDto)
@@ -103,10 +115,17 @@ export class RecipeService {
   //-------------- Management cost --------------
   async getCostIngredient(id: number) {
     let recipe = await this.findOne(id);
-    let ingredients = await this.recipeExecutionService.findAllIngredientsInRecipe(recipe.recipeExecutionId);
     let cost = 0;
-    for(let ingredient of ingredients){
-      cost += ingredient.quantity * ingredient.ingredient.unitaryPrice;
+    if(recipe) {
+      let ingredients = await this.recipeExecutionService.findAllIngredientsInRecipe(recipe.recipeExecutionId);
+      for (let ingredient of ingredients) {
+        cost += ingredient.quantity * ingredient.ingredient.unitaryPrice;
+      }
+    } else{
+      throw new HttpException({
+        status : HttpStatus.NOT_FOUND,
+        error: 'No recipe found',
+      }, HttpStatus.NOT_FOUND);
     }
     return cost;
   }

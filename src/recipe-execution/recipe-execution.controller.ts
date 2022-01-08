@@ -42,4 +42,17 @@ export class RecipeExecutionController {
   remove(@Param('id') id: string) {
     return this.recipeExecutionService.remove(+id);
   }
+
+  //-------------- Structure refactoring --------------
+  @Get('all-simple-steps/:id')
+  findAllSimpleStepInRecipeExecution(@Param('id') id: string) {
+     return this.recipeExecutionService.findAllSimpleStepInRecipeExecution(+id);
+  }
+
+  @Get('all-recipe-executions/:id')
+  findAllProgressionInRecipeExecution(@Param('id') id: string) {
+    return this.recipeExecutionService.findAllProgressionInRecipeExecution(+id);
+  }
+
+
 }
