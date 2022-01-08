@@ -25,12 +25,12 @@ export class RecipeController {
 
   @Get('duration/:id')
   getDuration(@Param('id') id: string) {
-    return this.recipeService.getDuration(+id);
+    return this.recipeService.getRecipeDuration(+id);
   }
 
   @Get('ingredient-cost/:id')
   getCostIngredient(@Param('id') id: string) {
-    return this.recipeService.getCostIngredient(+id);
+    return this.recipeService.getRecipeIngredientsTotalCost(+id);
   }
 
   @Get('ingredients-in-recipe/:id')

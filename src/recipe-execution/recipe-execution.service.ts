@@ -15,8 +15,9 @@ export class RecipeExecutionService {
     private stepWithinRecipeExecutionService: StepWithinRecipeExecutionService,
     private ingredientWithinStepService: IngredientWithinStepService,
     @InjectRepository(RecipeExecution)
-      private recipeExecutionRepository: Repository<RecipeExecution>,
-) {}
+    private recipeExecutionRepository: Repository<RecipeExecution>,
+  ) {
+  }
 
   create(createRecipeExecutionDto: CreateRecipeExecutionDto) {
     //'This action adds a new recipeExecution'
@@ -24,16 +25,16 @@ export class RecipeExecutionService {
   }
 
   findAll() {
-    `This action returns all recipeExecution`
+    `This action returns all recipeExecution`;
     return this.recipeExecutionRepository.find({
-      relations: ["ingredients"]
+      relations: ['ingredients'],
     });
   }
 
   findOne(id: number) {
     //`This action returns a #${id} recipeExecution`
-    return this.recipeExecutionRepository.findOne({id: id}, {
-      relations: ["ingredients", "recipe"]
+    return this.recipeExecutionRepository.findOne({ id: id }, {
+      relations: ['ingredients', 'recipe'],
     });
   }
 
@@ -43,80 +44,75 @@ export class RecipeExecutionService {
 
   update(id: number, updateRecipeExecutionDto: UpdateRecipeExecutionDto) {
     //`This action updates a #${id} recipeExecution`
-    return this.recipeExecutionRepository.update({id: id}, updateRecipeExecutionDto);
+    return this.recipeExecutionRepository.update({ id: id }, updateRecipeExecutionDto);
   }
 
   async removeSimpleStep(simpleStepId: number) {
     //`This action removes a #${id} recipeExecution`
     let ingredientsWithinStep = await this.findAllIngredientsWithinAStepInSimpleStep(simpleStepId);
-    for (let ingredientWithinStep of ingredientsWithinStep){
+    for (let ingredientWithinStep of ingredientsWithinStep) {
       await this.ingredientWithinStepService.remove(ingredientWithinStep.id);
     }
-    return this.recipeExecutionRepository.delete({id: simpleStepId});
+    return this.recipeExecutionRepository.delete({ id: simpleStepId });
   }
 
-/*  async getAllStepsInRecipeExecution(id: number) {
-    let steps: RecipeExecution[] = [];
-    let stepsWithinRecipeExecution = await this.stepWithinRecipeExecutionService.findAllStepInRecipeExecution(id);
-    for(let stepWithinRecipeExecution of stepsWithinRecipeExecution){
-      steps.push(await this.findOne(stepWithinRecipeExecution.stepId));
+  /*  async getAllStepsInRecipeExecution(id: number) {
+      let steps: RecipeExecution[] = [];
+      let stepsWithinRecipeExecution = await this.stepWithinRecipeExecutionService.findAllStepInRecipeExecution(id);
+      for(let stepWithinRecipeExecution of stepsWithinRecipeExecution){
+        steps.push(await this.findOne(stepWithinRecipeExecution.stepId));
+      }
+      return steps;
     }
-    return steps;
-  }
 
-  async getAllProgressionInRecipeExecution(id: number) {
-    let progressions: RecipeExecution[] = [];
-    let progressionsWithinRecipeExecution = await this.stepWithinRecipeExecutionService.findAllProgressionInRecipeExecution(id);
-    for(let progressionWithinRecipeExecution of progressionsWithinRecipeExecution){
-      progressions.push(await this.findOne(progressionWithinRecipeExecution.stepId));
-    }
-    return progressions;
-  }*/
+    async getAllProgressionInRecipeExecution(id: number) {
+      let progressions: RecipeExecution[] = [];
+      let progressionsWithinRecipeExecution = await this.stepWithinRecipeExecutionService.findAllProgressionInRecipeExecution(id);
+      for(let progressionWithinRecipeExecution of progressionsWithinRecipeExecution){
+        progressions.push(await this.findOne(progressionWithinRecipeExecution.stepId));
+      }
+      return progressions;
+    }*/
 
   getAllProgression() {
-    return this.recipeExecutionRepository.find({isStep: false});
+    return this.recipeExecutionRepository.find({ isStep: false });
   }
 
   //Retourne la durée complète de la recipe execution
-  async getDuration(id: number) {
+  async getRecipeExecutionDuration(id: number) {
     let duration = 0;
     let stepsWithinRecipeExecution = await this.findAllSimpleStepInRecipeExecution(id);
-    for(let stepWithinRecipeExecution of stepsWithinRecipeExecution){
+    for (let stepWithinRecipeExecution of stepsWithinRecipeExecution) {
       duration += stepWithinRecipeExecution.step.duration;
     }
     let recipeExecutionsWithinRecipeExecution = await this.findAllProgressionInRecipeExecution(id);
-    for(let recipeExecutionWithinRecipeExecution of recipeExecutionsWithinRecipeExecution){
-      duration += await this.getDuration(recipeExecutionWithinRecipeExecution.stepId);
+    for (let recipeExecutionWithinRecipeExecution of recipeExecutionsWithinRecipeExecution) {
+      duration += await this.getRecipeExecutionDuration(recipeExecutionWithinRecipeExecution.stepId);
     }
     return duration;
   }
 
   //idRecipeExecution : id de la progression que contient la recette
   //TODO: rename function with recipeExecution
-  async findAllIngredientsInRecipe(recipeExecutionId: number) {
+  //Retourne tout les ingredient présent dans une recipe execution, y compris ceux contenu dans les sous recipe execution
+  //Reduce doublons
+  async findAllIngredientsInRecipeExecution(recipeExecutionId: number) {
 
     let ingredientsMap = new Map<number, IngredientWithinStep>();
 
-    //On récupère toutes les étapes de la progression
-    let steps = await this.findAllSimpleStepInRecipeExecution(recipeExecutionId);
-
-    //pour chaque étpaes on récupère tous ses ingrédients
-    for (let step of steps) {
-      let stepIngredients = await this.ingredientWithinStepService.findAllIngredientsInStep2(step.id);
-
-      // pour chaque ingrédient, on ajoute sa quantité à la map
-      for (let ingredient of stepIngredients) {
-        this.addIngredientToMap(ingredient, ingredientsMap);
-      }
+    let stepsIngredients = await this.findAllIngredientsWithinAStepInSimpleStepsInRecipeExecution(recipeExecutionId);
+    // pour chaque ingrédient, on ajoute sa quantité à la map
+    for (let ingredient of stepsIngredients) {
+      this.addIngredientToMap(ingredient, ingredientsMap);
     }
 
-    //on récupère toutes
+    //on récupère toutes les progressions
     //TODO: cheks que ça na rien cassé
     let recipeExecutions = await this.findAllProgressionInRecipeExecution(recipeExecutionId);
 
     // Pour chaque progression on récupère ses ingrédients
     for (let recipeExecution of recipeExecutions) {
-      let executionIngredients = await this.findAllIngredientsInRecipe(recipeExecution.stepId);
+      let executionIngredients = await this.findAllIngredientsInRecipeExecution(recipeExecution.stepId);
 
       // pour chaque ingrédient, on ajoute sa quantité à la map
       for (let ingredient of executionIngredients) {
@@ -144,7 +140,7 @@ export class RecipeExecutionService {
       newIngredient.quantity = newQuantity; // increments the ingredient's quantity
       ingredientsMap.set(ingredientId, newIngredient);
     } else {
-      // The map doesn't contains this ingredient so wa add it
+      // The map doesn't contains this ingredient so we add it
       ingredientsMap.set(ingredientId, ingredient);
     }
   }
@@ -160,7 +156,7 @@ export class RecipeExecutionService {
   }
 
   //TODO: ne pas prendre l'id de la table mais stepId et recipeExecutionId
-  updateStepsOrderOfRecipeExecution(@Body() updateStepsWithinRecipeExecutionDto: UpdateStepWithinRecipeExecutionDto[]){
+  updateStepsOrderOfRecipeExecution(@Body() updateStepsWithinRecipeExecutionDto: UpdateStepWithinRecipeExecutionDto[]) {
     return this.stepWithinRecipeExecutionService.updateStepsOrderOfRecipeExecution(updateStepsWithinRecipeExecutionDto);
   }
 
@@ -172,9 +168,9 @@ export class RecipeExecutionService {
   async findAllIngredientsWithinAStepInSimpleStepsInRecipeExecution(recipeExecutionId: number) {
     let ingredientsWithinAStepsRes: IngredientWithinStep[] = [];
     let simpleSteps = await this.findAllSimpleStepInRecipeExecution(recipeExecutionId);
-    for (let simpleStep of simpleSteps){
+    for (let simpleStep of simpleSteps) {
       let ingredientsWithinStepTmp = await this.findAllIngredientsWithinAStepInSimpleStep(simpleStep.stepId);
-      for (let ingredientWithinAStep of ingredientsWithinStepTmp){
+      for (let ingredientWithinAStep of ingredientsWithinStepTmp) {
         ingredientsWithinAStepsRes.push(ingredientWithinAStep);
       }
     }

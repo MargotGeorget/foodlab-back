@@ -14,7 +14,7 @@ export class IngredientWithinStep {
   @Column()
   recipeExecutionId: number
 
-  @Column()
+  @Column({ type: 'decimal', nullable: true})
   quantity: number
 
   @ManyToOne(() => Ingredient, ingredient => ingredient.steps)

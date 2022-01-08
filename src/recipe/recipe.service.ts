@@ -51,10 +51,9 @@ export class RecipeService {
     })
   }
 
-  async findAllIngredientInRecipe(id: number){
-    let recipe = await this.findOne(id);
-    let recipeExecutionId = recipe.recipeExecutionId;
-    let ingredientsIterator = await this.recipeExecutionService.findAllIngredientsInRecipe(recipeExecutionId);
+  async findAllIngredientInRecipe(recipeId: number){
+    let recipe = await this.findOne(recipeId);
+    let ingredientsIterator = await this.recipeExecutionService.findAllIngredientsInRecipeExecution(recipe.recipeExecutionId);
     let ingredients: Ingredient[] = [];
     for (let ingredient of ingredientsIterator) {
       ingredients.push(ingredient.ingredient);
@@ -62,10 +61,9 @@ export class RecipeService {
     return ingredients;
   }
 
-  async findAllIngredientsWithinStepInRecipe(id: number){
-    let recipe = await this.findOne(id);
-    let recipeExecutionId = recipe.recipeExecutionId;
-    let ingredientsIterator = await this.recipeExecutionService.findAllIngredientsInRecipe(recipeExecutionId);
+  async findAllIngredientsWithinStepInRecipe(recipeId: number){
+    let recipe = await this.findOne(recipeId);
+    let ingredientsIterator = await this.recipeExecutionService.findAllIngredientsInRecipeExecution(recipe.recipeExecutionId);
     let ingredientsWithinStep: IngredientWithinStep[] = [];
     for (let ingredient of ingredientsIterator) {
       ingredientsWithinStep.push(ingredient);
@@ -84,13 +82,11 @@ export class RecipeService {
     return this.recipeRepository.delete({id: id});
   }
 
-  async sellRecipe(idRecipe: number){
-    //TODO: add verif recipe empty
-    let recipe = await this.findOne(idRecipe);
-
+  //TODO: reverifier bon fonctionnement
+  async sellRecipe(recipeId: number){
     //on récupère tout les ingrédients de la recette
-    let ingredients = await this.recipeExecutionService.findAllIngredientsInRecipe(recipe.recipeExecutionId);
-    for (let ingredient of ingredients){
+    let ingredientsWithinStep = await this.findAllIngredientsWithinStepInRecipe(recipeId);
+    for (let ingredient of ingredientsWithinStep){
       if(ingredient.quantity > ingredient.ingredient.stockQuantity){
         //la quantité en stock de l'ingrédient n'est pas suffisante, on ne peut pas vendre la recette
         throw new HttpException({
@@ -106,34 +102,26 @@ export class RecipeService {
     }
     //si on arrive ici sans avoir levé d'erreur Http alors la recette peut être vendu
     //on actualise alors le stock des ingrédients dans la base de données
-    for (let ingredient of ingredients){
+    for (let ingredient of ingredientsWithinStep){
       await this.ingredientService.update(ingredient.ingredientId, ingredient.ingredient);
     }
     return true;
   }
 
   //-------------- Management cost --------------
-  async getCostIngredient(id: number) {
-    let recipe = await this.findOne(id);
+  async getRecipeIngredientsTotalCost(recipeId: number) {
     let cost = 0;
-    if(recipe) {
-      let ingredients = await this.recipeExecutionService.findAllIngredientsInRecipe(recipe.recipeExecutionId);
-      for (let ingredient of ingredients) {
-        cost += ingredient.quantity * ingredient.ingredient.unitaryPrice;
-      }
-    } else{
-      throw new HttpException({
-        status : HttpStatus.NOT_FOUND,
-        error: 'No recipe found',
-      }, HttpStatus.NOT_FOUND);
+    let ingredients = await this.findAllIngredientsWithinStepInRecipe(recipeId);
+    for (let ingredient of ingredients) {
+      cost += ingredient.quantity * ingredient.ingredient.unitaryPrice;
     }
     return cost;
   }
 
-  async getDuration(id: number) {
+  async getRecipeDuration(id: number) {
     let recipe = await this.findOne(id);
     if(recipe) {
-      return this.recipeExecutionService.getDuration(recipe.recipeExecutionId);
+      return this.recipeExecutionService.getRecipeExecutionDuration(recipe.recipeExecutionId);
     }else{
       throw new HttpException({
         status : HttpStatus.NOT_FOUND,
