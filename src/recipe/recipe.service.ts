@@ -83,9 +83,18 @@ export class RecipeService {
     //`This action removes a #${id} recipe`
     let recipe = await this.findOne(recipeId);
     console.log(recipe);
-    //il faut supprimer sa recipe execution
-    await this.recipeRepository.delete({id: recipeId});
-    await this.recipeExecutionService.removeRecipeExecution(recipe.recipeExecutionId);
+
+    //vérifier que cette recette ne se trouve pas dans une autre recette
+    if(await this.recipeExecutionService.isUsedInOtherRecipeExecution(recipe.recipeExecutionId)){
+      throw new HttpException({
+        status : HttpStatus.CONFLICT,
+        error: 'You cannot delete this recipe, its recipe execution is used in other recipes',
+      }, HttpStatus.CONFLICT);
+    } else {
+      //il faut supprimer sa recipe execution
+      await this.recipeRepository.delete({ id: recipeId });
+      await this.recipeExecutionService.removeRecipeExecution(recipe.recipeExecutionId);
+    }
   }
 
   //TODO: reverifier bon fonctionnement

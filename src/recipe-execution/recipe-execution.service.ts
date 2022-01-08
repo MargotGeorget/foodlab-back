@@ -64,7 +64,12 @@ export class RecipeExecutionService {
     for (let simpleStep of simpleSteps){
       await this.removeSimpleStep(simpleStep.step.id);
     }
+    await this.stepWithinRecipeExecutionService.removeStepWithinRecipeExecutionByStep(recipeExecutionId);
     return this.recipeExecutionRepository.delete({id: recipeExecutionId});
+  }
+
+  isUsedInOtherRecipeExecution(recipeExecutionId: number){
+    return this.stepWithinRecipeExecutionService.isUsedInOtherRecipe(recipeExecutionId);
   }
 
   /*  async getAllStepsInRecipeExecution(id: number) {

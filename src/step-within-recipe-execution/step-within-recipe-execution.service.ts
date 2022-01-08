@@ -127,6 +127,11 @@ export class StepWithinRecipeExecutionService {
     return res;
   }
 
+  async isUsedInOtherRecipe(recipeExecutionId: number){
+    let recipeExecutions = await this.stepWithinRecipeExecutionRepository.find({stepId: recipeExecutionId});
+    return recipeExecutions.length > 0;
+  }
+
   //TODO: demander à Nathan comment bin nommer cette fonction
   removeStepWithinRecipeExecutionByStep(stepId: number) {
     //`This action removes a #${id} stepWithinRecipeExecution`
