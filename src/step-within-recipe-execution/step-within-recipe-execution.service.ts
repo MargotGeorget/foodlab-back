@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateStepWithinRecipeExecutionDto } from './dto/create-step-within-recipe-execution.dto';
 import { UpdateStepWithinRecipeExecutionDto } from './dto/update-step-within-recipe-execution.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -16,15 +16,44 @@ export class StepWithinRecipeExecutionService {
   async create(createStepWithinRecipeExecutionDto: CreateStepWithinRecipeExecutionDto) {
     //This action adds a new stepWithinRecipeExecution'
     console.log(createStepWithinRecipeExecutionDto);
-    let steps = await this.findAllStepInRecipeExecution(
-      createStepWithinRecipeExecutionDto.recipeExecutionId
-    )
-    let nbOfSteps = steps.length + 1;
-    return this.stepWithinRecipeExecutionRepository.save({
-      stepId: createStepWithinRecipeExecutionDto.stepId,
-      recipeExecutionId: createStepWithinRecipeExecutionDto.recipeExecutionId,
-      number: nbOfSteps
-    });
+
+    //on vérifie que l'on ajoute pas la propre progression de la recette dans la recette
+    let isSameRecipeExecution = createStepWithinRecipeExecutionDto.stepId == createStepWithinRecipeExecutionDto.recipeExecutionId;
+    if(isSameRecipeExecution) {
+      console.log("ici")
+      throw new HttpException({
+        status: HttpStatus.CONFLICT,
+        error: 'You cannot add its own recipe execution to a recipe ',
+      }, HttpStatus.CONFLICT);
+    } else {
+
+      //Si l'étape que l'on veut ajouter est une progression il faut vérifier qu'elle ne contient pas déjà l'étape dans
+      // laquelle on veut l'ajouter sinon boucle infini
+      let stepContainRecipeExecution = await this.stepWithinRecipeExecutionRepository.find({
+        stepId: createStepWithinRecipeExecutionDto.recipeExecutionId,
+        recipeExecutionId: createStepWithinRecipeExecutionDto.stepId,
+      });
+
+      if (stepContainRecipeExecution.length > 0) {
+        throw new HttpException({
+          status: HttpStatus.CONFLICT,
+          error: 'The step you want to add to the recipe already contains this recipe in its step list, ' +
+            'you cannot add recipes to each other in another recipe ',
+        }, HttpStatus.CONFLICT);
+      } else {
+
+        //On récupère le nombre d'étape dajà présent dans la recette pour trouver le number de la recette
+        let steps = await this.findAllStepInRecipeExecution(
+          createStepWithinRecipeExecutionDto.recipeExecutionId,
+        );
+        let nbOfSteps = steps.length + 1;
+        return this.stepWithinRecipeExecutionRepository.save({
+          stepId: createStepWithinRecipeExecutionDto.stepId,
+          recipeExecutionId: createStepWithinRecipeExecutionDto.recipeExecutionId,
+          number: nbOfSteps,
+        });
+      }
+    }
   }
 
   findAll() {

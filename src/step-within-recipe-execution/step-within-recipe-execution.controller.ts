@@ -36,7 +36,7 @@ export class StepWithinRecipeExecutionController {
   updateAllStepsWithinRecipeExecution(@Body() updateStepsWithinRecipeExecutionDto: UpdateStepWithinRecipeExecutionDto[]){
     //Vérifier qu'aucune valeur number soit supérieur au nombre de valeur
     let valid = updateStepsWithinRecipeExecutionDto.every(step =>
-      step.number <= updateStepsWithinRecipeExecutionDto.length);
+      step.number <= updateStepsWithinRecipeExecutionDto.length && step.number>0);
     //Vérifier que toutes les valeurs sont différentes
     if (valid) {
       valid = updateStepsWithinRecipeExecutionDto.every(data1 =>
