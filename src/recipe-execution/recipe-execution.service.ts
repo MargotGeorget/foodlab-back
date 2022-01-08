@@ -47,6 +47,18 @@ export class RecipeExecutionService {
     return this.recipeExecutionRepository.update({ id: id }, updateRecipeExecutionDto);
   }
 
+  async removeStepWithinRecipeExecution(stepWithinRecipeExecutionId: number){
+    let stepWithinRecipeExecution = await this.stepWithinRecipeExecutionService.findOne(stepWithinRecipeExecutionId);
+    let step = await this.findOne(stepWithinRecipeExecution.stepId);
+    if(step.isStep){
+      //Si c'est juste une étape on supprime l'étape et les ingrédients de l'étape (table de joiture)
+      return this.removeSimpleStep(stepWithinRecipeExecution.stepId);
+    } else {
+      //Sinon on supprime juste la liaison entre la recipe execution et l'autre recipe execution
+      await this.stepWithinRecipeExecutionService.remove(stepWithinRecipeExecutionId);
+    }
+  }
+
   async removeSimpleStep(simpleStepId: number) {
     //`This action removes a #${id} recipeExecution`
     let ingredientsWithinStep = await this.findAllIngredientsWithinAStepInSimpleStep(simpleStepId);

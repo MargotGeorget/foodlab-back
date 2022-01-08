@@ -131,10 +131,11 @@ export class StepWithinRecipeExecutionService {
   }
 
   //TODO: demander à Nathan comment bin nommer cette fonction
-  removeStepWithinRecipeExecutionByStep(stepId: number) {
-    //Utilisé uniquement avec suppression de recette entière donc pas besoin de gérer les number
-    //`This action removes a #${id} stepWithinRecipeExecution`
-    return this.stepWithinRecipeExecutionRepository.delete({ stepId: stepId });
+  async removeStepWithinRecipeExecutionByStep(stepId: number) {
+    let stepsWithinRecipeExecution = await this.stepWithinRecipeExecutionRepository.find({stepId: stepId});
+    for (let stepWithinRecipeExecution of stepsWithinRecipeExecution) {
+      await this.remove(stepWithinRecipeExecution.id);
+    }
   }
 
   async remove(stepWithinRecipeExecutionId: number) {

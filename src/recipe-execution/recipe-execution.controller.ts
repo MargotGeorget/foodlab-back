@@ -51,6 +51,11 @@ export class RecipeExecutionController {
     return this.recipeExecutionService.removeSimpleStep(+id);
   }
 
+  @Delete('remove-step-within-recipe-execution/:id')
+  removeStepWithinRecipeExecution(@Param('id') id: string) {
+    return this.recipeExecutionService.removeStepWithinRecipeExecution(+id);
+  }
+
   //-------------- Structure refactoring --------------
   @Get('all-simple-steps/:id')
   findAllSimpleStepInRecipeExecution(@Param('id') id: string) {
