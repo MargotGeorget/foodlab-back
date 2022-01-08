@@ -33,7 +33,7 @@ export class StepWithinRecipeExecutionController {
   //   return this.stepWithinRecipeExecutionService.findAllProgressionInRecipeExecution(+id)}
 
   //TODO: placer dans le service
-/*  @Patch('update-all')
+/*@Patch('update-all')
   updateAllStepsWithinRecipeExecution(@Body() updateStepsWithinRecipeExecutionDto: UpdateStepWithinRecipeExecutionDto[]){
     //Vérifier qu'aucune valeur number soit supérieur au nombre de valeur
     let valid = updateStepsWithinRecipeExecutionDto.every(step =>

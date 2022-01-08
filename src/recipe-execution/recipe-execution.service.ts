@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Body, Injectable } from '@nestjs/common';
 import { CreateRecipeExecutionDto } from './dto/create-recipe-execution.dto';
 import { UpdateRecipeExecutionDto } from './dto/update-recipe-execution.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -7,6 +7,7 @@ import { Repository } from 'typeorm';
 import { StepWithinRecipeExecutionService } from '../step-within-recipe-execution/step-within-recipe-execution.service';
 import { IngredientWithinStepService } from '../ingredient-within-step/ingredient-within-step.service';
 import { IngredientWithinStep } from '../ingredient-within-step/entities/ingredient-within-step.entity';
+import { UpdateStepWithinRecipeExecutionDto } from '../step-within-recipe-execution/dto/update-step-within-recipe-execution.dto';
 
 @Injectable()
 export class RecipeExecutionService {
@@ -158,6 +159,11 @@ export class RecipeExecutionService {
   //TODO: refactor progression
   findAllProgressionInRecipeExecution(recipeExecutionId: number) {
     return this.stepWithinRecipeExecutionService.findAllProgressionInRecipeExecution(recipeExecutionId);
+  }
+
+  //TODO: ne pas prendre l'id de la table mais stepId et recipeExecutionId
+  updateStepsOrderOfRecipeExecution(@Body() updateStepsWithinRecipeExecutionDto: UpdateStepWithinRecipeExecutionDto[]){
+    return this.stepWithinRecipeExecutionService.updateStepsOrderOfRecipeExecution(updateStepsWithinRecipeExecutionDto);
   }
 
 }

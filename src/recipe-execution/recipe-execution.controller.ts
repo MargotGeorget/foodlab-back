@@ -2,7 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { RecipeExecutionService } from './recipe-execution.service';
 import { CreateRecipeExecutionDto } from './dto/create-recipe-execution.dto';
 import { UpdateRecipeExecutionDto } from './dto/update-recipe-execution.dto';
-import { Ingredient } from '../ingredient/entities/ingredient.entity';
+import { UpdateStepWithinRecipeExecutionDto } from '../step-within-recipe-execution/dto/update-step-within-recipe-execution.dto';
 
 @Controller('recipe-execution')
 export class RecipeExecutionController {
@@ -33,10 +33,10 @@ export class RecipeExecutionController {
     return this.recipeExecutionService.findAllInRecipe(+id);
   }
 
-  @Patch(':id')
+  /*@Patch(':id')
   update(@Param('id') id: string, @Body() updateRecipeExecutionDto: UpdateRecipeExecutionDto) {
     return this.recipeExecutionService.update(+id, updateRecipeExecutionDto);
-  }
+  }*/
 
   @Delete(':id')
   remove(@Param('id') id: string) {
@@ -52,6 +52,11 @@ export class RecipeExecutionController {
   @Get('all-recipe-executions/:id')
   findAllProgressionInRecipeExecution(@Param('id') id: string) {
     return this.recipeExecutionService.findAllProgressionInRecipeExecution(+id);
+  }
+
+  @Patch('update-steps-order')
+  updateStepsOrderOfRecipeExecution(@Body() updateStepsWithinRecipeExecutionDto: UpdateStepWithinRecipeExecutionDto[]){
+    return this.recipeExecutionService.updateStepsOrderOfRecipeExecution(updateStepsWithinRecipeExecutionDto);
   }
 
 

@@ -19,8 +19,8 @@ export class StepWithinRecipeExecutionService {
 
     //on vérifie que l'on ajoute pas la propre progression de la recette dans la recette
     let isSameRecipeExecution = createStepWithinRecipeExecutionDto.stepId == createStepWithinRecipeExecutionDto.recipeExecutionId;
-    if(isSameRecipeExecution) {
-      console.log("ici")
+    if (isSameRecipeExecution) {
+      console.log('ici');
       throw new HttpException({
         status: HttpStatus.CONFLICT,
         error: 'You cannot add its own recipe execution to a recipe ',
@@ -79,8 +79,10 @@ export class StepWithinRecipeExecutionService {
     return this.stepWithinRecipeExecutionRepository.find({
       select: ['step', 'number'],
       relations: ['step'],
-      where: { recipeExecutionId: idRecipeExecution,
-        step:{isStep: false}},
+      where: {
+        recipeExecutionId: idRecipeExecution,
+        step: { isStep: false },
+      },
 
     });
   }
@@ -91,10 +93,10 @@ export class StepWithinRecipeExecutionService {
   }
 
   //TODO: ne pas prendre l'id de la table mais stepId et recipeExecutionId
-  updateAllStepsWithinRecipeExecution(@Body() updateStepsWithinRecipeExecutionDto: UpdateStepWithinRecipeExecutionDto[]){
+  updateStepsOrderOfRecipeExecution(@Body() updateStepsWithinRecipeExecutionDto: UpdateStepWithinRecipeExecutionDto[]) {
     //Vérifier qu'aucune valeur number soit supérieur au nombre de valeur
     let valid = updateStepsWithinRecipeExecutionDto.every(step =>
-      step.number <= updateStepsWithinRecipeExecutionDto.length && step.number>0);
+      step.number <= updateStepsWithinRecipeExecutionDto.length && step.number > 0);
     //Vérifier que toutes les valeurs sont différentes
     if (valid) {
       valid = updateStepsWithinRecipeExecutionDto.every(data1 =>
@@ -102,13 +104,13 @@ export class StepWithinRecipeExecutionService {
           data1 === data2 || data1.number != data2.number));
     }
     let res = [];
-    if (valid){
-      for(let updateStepWithinRecipeExecutionDto of updateStepsWithinRecipeExecutionDto){
-        res.push(this.update(updateStepWithinRecipeExecutionDto.id, updateStepWithinRecipeExecutionDto))
+    if (valid) {
+      for (let updateStepWithinRecipeExecutionDto of updateStepsWithinRecipeExecutionDto) {
+        res.push(this.update(updateStepWithinRecipeExecutionDto.id, updateStepWithinRecipeExecutionDto));
       }
     } else {
       throw new HttpException({
-        status : HttpStatus.CONFLICT,
+        status: HttpStatus.CONFLICT,
         error: 'Number of step must be different and between 1 and ' + updateStepsWithinRecipeExecutionDto.length,
       }, HttpStatus.CONFLICT);
     }
