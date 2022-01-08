@@ -15,12 +15,10 @@ export class StepWithinRecipeExecutionService {
 
   async create(createStepWithinRecipeExecutionDto: CreateStepWithinRecipeExecutionDto) {
     //This action adds a new stepWithinRecipeExecution'
-    console.log(createStepWithinRecipeExecutionDto);
 
     //on vérifie que l'on ajoute pas la propre progression de la recette dans la recette
     let isSameRecipeExecution = createStepWithinRecipeExecutionDto.stepId == createStepWithinRecipeExecutionDto.recipeExecutionId;
     if (isSameRecipeExecution) {
-      console.log('ici');
       throw new HttpException({
         status: HttpStatus.CONFLICT,
         error: 'You cannot add its own recipe execution to a recipe ',
@@ -127,19 +125,29 @@ export class StepWithinRecipeExecutionService {
     return res;
   }
 
-  async isUsedInOtherRecipe(recipeExecutionId: number){
+  async isUsedInOtherRecipeExecution(recipeExecutionId: number){
     let recipeExecutions = await this.stepWithinRecipeExecutionRepository.find({stepId: recipeExecutionId});
     return recipeExecutions.length > 0;
   }
 
   //TODO: demander à Nathan comment bin nommer cette fonction
   removeStepWithinRecipeExecutionByStep(stepId: number) {
+    //Utilisé uniquement avec suppression de recette entière donc pas besoin de gérer les number
     //`This action removes a #${id} stepWithinRecipeExecution`
     return this.stepWithinRecipeExecutionRepository.delete({ stepId: stepId });
   }
 
-  remove(id: number) {
+  async remove(stepWithinRecipeExecutionId: number) {
     //`This action removes a #${id} stepWithinRecipeExecution`
-    return this.stepWithinRecipeExecutionRepository.delete({ id: id });
+    let stepWithinRecipeExecution = await this.findOne(stepWithinRecipeExecutionId);
+    let numberOfThisStep = stepWithinRecipeExecution.number;
+    //récupérer toutes les autre stepWithinRecipeExecution de la même recipe execution
+    let stepsWithinRecipeExecution = await this.findAllStepInRecipeExecution(stepWithinRecipeExecution.recipeExecutionId);
+    for (let step of stepsWithinRecipeExecution){
+      if (step.number > numberOfThisStep){
+        await this.stepWithinRecipeExecutionRepository.update({id: step.id}, { number:step.number-1 } );
+      }
+    }
+    return this.stepWithinRecipeExecutionRepository.delete({ id: stepWithinRecipeExecutionId });
   }
 }

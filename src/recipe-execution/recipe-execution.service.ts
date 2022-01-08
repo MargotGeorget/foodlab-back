@@ -69,7 +69,7 @@ export class RecipeExecutionService {
   }
 
   isUsedInOtherRecipeExecution(recipeExecutionId: number){
-    return this.stepWithinRecipeExecutionService.isUsedInOtherRecipe(recipeExecutionId);
+    return this.stepWithinRecipeExecutionService.isUsedInOtherRecipeExecution(recipeExecutionId);
   }
 
   /*  async getAllStepsInRecipeExecution(id: number) {
