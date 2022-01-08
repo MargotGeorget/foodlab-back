@@ -57,6 +57,11 @@ export class RecipeExecutionController {
      return this.recipeExecutionService.findAllSimpleStepInRecipeExecution(+id);
   }
 
+  @Get('all-steps/:id')
+  findAllStepInRecipeExecution(@Param('id') id: string) {
+    return this.recipeExecutionService.findAllStepInRecipeExecution(+id);
+  }
+
   @Get('all-recipe-executions/:id')
   findAllProgressionInRecipeExecution(@Param('id') id: string) {
     return this.recipeExecutionService.findAllProgressionInRecipeExecution(+id);

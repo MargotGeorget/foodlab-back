@@ -69,7 +69,17 @@ export class StepWithinRecipeExecutionService {
   findAllSimpleStepInRecipeExecution(idRecipeExecution: number) {
     //`This action returns all the steps in a #${id} recipeExecution`
     return this.stepWithinRecipeExecutionRepository.find({
-      where: { recipeExecutionId: idRecipeExecution },
+      where: { recipeExecutionId: idRecipeExecution,
+        step: { isStep: true }
+      },
+      relations: ['step'],
+    });
+  }
+
+  findAllStepInRecipeExecution(idRecipeExecution: number) {
+    //`This action returns all the steps in a #${id} recipeExecution`
+    return this.stepWithinRecipeExecutionRepository.find({
+      where: { recipeExecutionId: idRecipeExecution},
       relations: ['step'],
     });
   }
@@ -81,7 +91,7 @@ export class StepWithinRecipeExecutionService {
       relations: ['step'],
       where: {
         recipeExecutionId: idRecipeExecution,
-        step: { isStep: false },
+        step: { isStep: false }
       },
 
     });
@@ -115,6 +125,12 @@ export class StepWithinRecipeExecutionService {
       }, HttpStatus.CONFLICT);
     }
     return res;
+  }
+
+  //TODO: demander à Nathan comment bin nommer cette fonction
+  removeStepWithinRecipeExecutionByStep(stepId: number) {
+    //`This action removes a #${id} stepWithinRecipeExecution`
+    return this.stepWithinRecipeExecutionRepository.delete({ stepId: stepId });
   }
 
   remove(id: number) {

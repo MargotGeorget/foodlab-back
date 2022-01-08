@@ -50,10 +50,21 @@ export class RecipeExecutionService {
   async removeSimpleStep(simpleStepId: number) {
     //`This action removes a #${id} recipeExecution`
     let ingredientsWithinStep = await this.findAllIngredientsWithinAStepInSimpleStep(simpleStepId);
+    console.log(ingredientsWithinStep);
     for (let ingredientWithinStep of ingredientsWithinStep) {
       await this.ingredientWithinStepService.remove(ingredientWithinStep.id);
     }
+    await this.stepWithinRecipeExecutionService.removeStepWithinRecipeExecutionByStep(simpleStepId);
     return this.recipeExecutionRepository.delete({ id: simpleStepId });
+  }
+
+  async removeRecipeExecution(recipeExecutionId){
+    let simpleSteps = await this.findAllSimpleStepInRecipeExecution(recipeExecutionId);
+    console.log(simpleSteps);
+    for (let simpleStep of simpleSteps){
+      await this.removeSimpleStep(simpleStep.step.id);
+    }
+    return this.recipeExecutionRepository.delete({id: recipeExecutionId});
   }
 
   /*  async getAllStepsInRecipeExecution(id: number) {
@@ -148,6 +159,10 @@ export class RecipeExecutionService {
   //-------------- Structure refactoring --------------
   findAllSimpleStepInRecipeExecution(recipeExecutionId: number) {
     return this.stepWithinRecipeExecutionService.findAllSimpleStepInRecipeExecution(recipeExecutionId);
+  }
+
+  findAllStepInRecipeExecution(idRecipeExecution: number) {
+    return this.stepWithinRecipeExecutionService.findAllStepInRecipeExecution(idRecipeExecution);
   }
 
   //TODO: refactor progression

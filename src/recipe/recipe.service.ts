@@ -17,8 +17,6 @@ export class RecipeService {
 
   constructor(
     private ingredientService: IngredientService,
-    private ingredientWithinStepService: IngredientWithinStepService,
-    private stepWithinRecipeExecutionService: StepWithinRecipeExecutionService,
     private recipeExecutionService: RecipeExecutionService,
     @InjectRepository(Recipe)
     private recipeRepository: Repository<Recipe>,
@@ -71,15 +69,23 @@ export class RecipeService {
     return ingredientsWithinStep;
   }
 
+  async findAllSimpleStepsInRecipe(recipeId: number){
+    let recipe = await this.findOne(recipeId);
+    return this.recipeExecutionService.findAllSimpleStepInRecipeExecution(recipe.recipeExecutionId);
+  }
+
   update(id: number, updateRecipeDto: UpdateRecipeDto) {
     //`This action updates a #${id} recipe`
-    console.log(updateRecipeDto)
     return this.recipeRepository.update({id: id}, updateRecipeDto) ;
   }
 
-  remove(id: number) {
+  async remove(recipeId: number) {
     //`This action removes a #${id} recipe`
-    return this.recipeRepository.delete({id: id});
+    let recipe = await this.findOne(recipeId);
+    console.log(recipe);
+    //il faut supprimer sa recipe execution
+    await this.recipeRepository.delete({id: recipeId});
+    await this.recipeExecutionService.removeRecipeExecution(recipe.recipeExecutionId);
   }
 
   //TODO: reverifier bon fonctionnement
