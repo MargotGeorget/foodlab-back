@@ -29,7 +29,12 @@ export class RecipeService {
   create(createRecipeDto: CreateRecipeDto) {
     //This action adds a new recipe
     console.log(createRecipeDto)
-    return this.recipeRepository.save({ createRecipeDto, costDataId: 1 });
+    return this.recipeRepository.save({
+      name: createRecipeDto.name,
+      author: createRecipeDto.author,
+      guestsNumber: createRecipeDto.guestsNumber,
+      recipeCategoryId: createRecipeDto.recipeCategoryId,
+      costDataId: 1 });
   }
 
   findAll() {
