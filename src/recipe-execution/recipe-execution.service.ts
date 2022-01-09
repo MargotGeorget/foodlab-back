@@ -192,7 +192,8 @@ export class RecipeExecutionService {
     return this.stepWithinRecipeExecutionService.updateStepsOrderOfRecipeExecution(updateStepsWithinRecipeExecutionDto);
   }
 
-  findAllIngredientsWithinAStepInSimpleStep(simpleStepId: number) {
+  async findAllIngredientsWithinAStepInSimpleStep(simpleStepId: number) {
+    const a = await this.ingredientWithinStepService.findAllIngredientsInSimpleStep(simpleStepId);
     return this.ingredientWithinStepService.findAllIngredientsInSimpleStep(simpleStepId);
   }
 

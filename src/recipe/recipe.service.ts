@@ -97,16 +97,17 @@ export class RecipeService {
     }
   }
 
-  //TODO: reverifier bon fonctionnement
-  async sellRecipe(recipeId: number){
+  async sellRecipe(recipeId: number) {
     //on récupère tout les ingrédients de la recette
     let ingredientsWithinStep = await this.findAllIngredientsWithinStepInRecipe(recipeId);
     for (let ingredient of ingredientsWithinStep){
-      if(ingredient.quantity > ingredient.ingredient.stockQuantity){
+      const quantity = Number(ingredient.quantity);
+      const stockQuantity = Number(ingredient.ingredient.stockQuantity);
+      if(quantity > stockQuantity) {
         //la quantité en stock de l'ingrédient n'est pas suffisante, on ne peut pas vendre la recette
         throw new HttpException({
           status : HttpStatus.CONFLICT,
-          error: 'Insufficient  quantity in stock ',
+          error: 'Insufficient  quantity in stock',
         }, HttpStatus.CONFLICT);
         return false;
       }
@@ -118,10 +119,12 @@ export class RecipeService {
     //si on arrive ici sans avoir levé d'erreur Http alors la recette peut être vendu
     //on actualise alors le stock des ingrédients dans la base de données
     for (let ingredient of ingredientsWithinStep){
-      await this.ingredientService.update(ingredient.ingredientId, ingredient.ingredient);
+      //await this.ingredientService.update(ingredient.ingredientId, ingredient.ingredient);
+      await this.ingredientService.updateQuantity(ingredient.ingredientId, ingredient.ingredient)
     }
     return true;
   }
+
 
   //-------------- Management cost --------------
   async getRecipeIngredientsTotalCost(recipeId: number) {
@@ -131,6 +134,10 @@ export class RecipeService {
       cost += ingredient.quantity * ingredient.ingredient.unitaryPrice;
     }
     return cost;
+  }
+
+  getRecipeChargesCost(recipeId: number) {
+
   }
 
   async getRecipeDuration(id: number) {
