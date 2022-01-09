@@ -11,6 +11,9 @@ import { RecipeExecution } from '../recipe-execution/entities/recipe-execution.e
 import { RecipeExecutionService } from '../recipe-execution/recipe-execution.service';
 import { Ingredient } from '../ingredient/entities/ingredient.entity';
 import { IngredientWithinStep } from '../ingredient-within-step/entities/ingredient-within-step.entity';
+import { CostDataService } from '../cost-data/cost-data.service';
+import { UpdateCostDataDto } from '../cost-data/dto/update-cost-data.dto';
+import { CreateCostDataDto } from '../cost-data/dto/create-cost-data.dto';
 
 @Injectable()
 export class RecipeService {
@@ -18,6 +21,7 @@ export class RecipeService {
   constructor(
     private ingredientService: IngredientService,
     private recipeExecutionService: RecipeExecutionService,
+    private costDataService: CostDataService,
     @InjectRepository(Recipe)
     private recipeRepository: Repository<Recipe>,
   ) {}
@@ -77,6 +81,11 @@ export class RecipeService {
   update(id: number, updateRecipeDto: UpdateRecipeDto) {
     //`This action updates a #${id} recipe`
     return this.recipeRepository.update({id: id}, updateRecipeDto) ;
+  }
+
+  async updateCostData(recipeId: number, createCostDataDto: CreateCostDataDto) {
+    let costData = await this.costDataService.create(createCostDataDto);
+    return this.recipeRepository.update({id: recipeId}, {costDataId: costData.id});
   }
 
   async remove(recipeId: number) {

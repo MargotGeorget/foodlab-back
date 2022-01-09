@@ -8,8 +8,8 @@ export class CostDataController {
   constructor(private readonly costDataService: CostDataService) {}
 
   @Post()
-  create(@Body() createCostDatumDto: CreateCostDataDto) {
-    return this.costDataService.create(createCostDatumDto);
+  create(@Body() createCostDataDto: CreateCostDataDto) {
+    return this.costDataService.create(createCostDataDto);
   }
 
   @Get()
@@ -23,8 +23,8 @@ export class CostDataController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateCostDatumDto: UpdateCostDataDto) {
-    return this.costDataService.update(+id, updateCostDatumDto);
+  update(@Param('id') id: string, @Body() updateCostDataDto: UpdateCostDataDto) {
+    return this.costDataService.update(+id, updateCostDataDto);
   }
 
   @Delete(':id')

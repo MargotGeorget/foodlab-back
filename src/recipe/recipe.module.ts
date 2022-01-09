@@ -7,13 +7,15 @@ import { IngredientModule } from '../ingredient/ingredient.module';
 import { IngredientWithinStepModule } from '../ingredient-within-step/ingredient-within-step.module';
 import { StepWithinRecipeExecutionModule } from '../step-within-recipe-execution/step-within-recipe-execution.module';
 import { RecipeExecutionModule } from '../recipe-execution/recipe-execution.module';
+import { CostDataModule } from '../cost-data/cost-data.module';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Recipe]),
     IngredientModule,
     forwardRef(() => IngredientWithinStepModule),
     StepWithinRecipeExecutionModule,
-    RecipeExecutionModule
+    RecipeExecutionModule,
+    CostDataModule
   ],
   controllers: [RecipeController],
   providers: [RecipeService],

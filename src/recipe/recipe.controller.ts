@@ -3,6 +3,8 @@ import { RecipeService } from './recipe.service';
 import { CreateRecipeDto } from './dto/create-recipe.dto';
 import { UpdateRecipeDto } from './dto/update-recipe.dto';
 import { Ingredient } from '../ingredient/entities/ingredient.entity';
+import { UpdateStepWithinRecipeExecutionDto } from '../step-within-recipe-execution/dto/update-step-within-recipe-execution.dto';
+import { CreateCostDataDto } from '../cost-data/dto/create-cost-data.dto';
 
 @Controller('recipe')
 export class RecipeController {
@@ -56,6 +58,11 @@ export class RecipeController {
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateRecipeDto: UpdateRecipeDto) {
     return this.recipeService.update(+id, updateRecipeDto);
+  }
+
+  @Patch('update-cost-data/:id')
+  updateCostData(@Param('id') id: string, @Body() createCostDataDto: CreateCostDataDto) {
+    return this.recipeService.updateCostData(+id, createCostDataDto);
   }
 
   @Delete(':id')

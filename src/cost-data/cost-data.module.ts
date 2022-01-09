@@ -7,6 +7,7 @@ import { CostData } from './entities/cost-data.entity';
 @Module({
   imports: [TypeOrmModule.forFeature([CostData])],
   controllers: [CostDataController],
-  providers: [CostDataService]
+  providers: [CostDataService],
+  exports: [CostDataService]
 })
 export class CostDataModule {}
