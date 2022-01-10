@@ -41,6 +41,11 @@ export class IngredientService {
     return this.ingredientRepository.update({id: id}, updateIngredientDto);
   }
 
+  updateQuantity(id: number, updateIngredientDto: UpdateIngredientDto) {
+    console.log("update ingredient");
+    return this.ingredientRepository.update({id: id}, {stockQuantity: updateIngredientDto.stockQuantity});
+  }
+
   remove(id: number) {
     return this.ingredientRepository.delete({id: id});
   }
