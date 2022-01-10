@@ -5,15 +5,12 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Recipe } from './entities/recipe.entity';
 import { IngredientService } from '../ingredient/ingredient.service';
-import { IngredientWithinStepService } from '../ingredient-within-step/ingredient-within-step.service';
-import { StepWithinRecipeExecutionService } from '../step-within-recipe-execution/step-within-recipe-execution.service';
-import { RecipeExecution } from '../recipe-execution/entities/recipe-execution.entity';
 import { RecipeExecutionService } from '../recipe-execution/recipe-execution.service';
 import { Ingredient } from '../ingredient/entities/ingredient.entity';
 import { IngredientWithinStep } from '../ingredient-within-step/entities/ingredient-within-step.entity';
 import { CostDataService } from '../cost-data/cost-data.service';
-import { UpdateCostDataDto } from '../cost-data/dto/update-cost-data.dto';
 import { CreateCostDataDto } from '../cost-data/dto/create-cost-data.dto';
+import { UpdateCostDataDto } from '../cost-data/dto/update-cost-data.dto';
 
 @Injectable()
 export class RecipeService {
@@ -89,8 +86,14 @@ export class RecipeService {
   }
 
   async updateCostData(recipeId: number, createCostDataDto: CreateCostDataDto) {
-    let costData = await this.costDataService.create(createCostDataDto);
-    return this.recipeRepository.update({id: recipeId}, {costDataId: costData.id});
+    let recipe = await this.findOne(recipeId);
+    if(recipe.costDataId == 1){
+      let costData = await this.costDataService.create(createCostDataDto);
+      await this.recipeRepository.update({id: recipeId}, {costDataId: costData.id});
+    } else {
+      await this.costDataService.update(recipe.costDataId, createCostDataDto);
+    }
+
   }
 
   async remove(recipeId: number) {

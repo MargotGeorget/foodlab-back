@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateCostDataDto } from './dto/create-cost-data.dto';
 import { UpdateCostDataDto } from './dto/update-cost-data.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -35,7 +35,12 @@ export class CostDataService {
 
   remove(id: number) {
     //`This action removes a #${id} costData`
-    //TODO: vérifier que c'est pas le cout pas défaut
+    if(id==1){
+      throw new HttpException({
+        status : HttpStatus.CONFLICT,
+        error: 'You can not delete the default cost ',
+      }, HttpStatus.CONFLICT);
+    }
     return this.costDataRepository.delete({id: id});
   }
 }
