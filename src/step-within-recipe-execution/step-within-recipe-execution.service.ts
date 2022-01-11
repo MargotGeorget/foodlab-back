@@ -41,7 +41,7 @@ export class StepWithinRecipeExecutionService {
       } else {
 
         //On récupère le nombre d'étape dajà présent dans la recette pour trouver le number de la recette
-        let steps = await this.findAllSimpleStepInRecipeExecution(
+        let steps = await this.findAllStepInRecipeExecution(
           createStepWithinRecipeExecutionDto.recipeExecutionId,
         );
         let nbOfSteps = steps.length + 1;
