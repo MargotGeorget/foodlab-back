@@ -71,10 +71,9 @@ export class RecipeExecutionService {
   }
 
   async removeRecipeExecution(recipeExecutionId){
-    let simpleSteps = await this.findAllSimpleStepInRecipeExecution(recipeExecutionId);
-    console.log(simpleSteps);
-    for (let simpleStep of simpleSteps){
-      await this.removeSimpleStep(simpleStep.step.id);
+    let steps = await this.findAllStepInRecipeExecution(recipeExecutionId);
+    for (let step of steps){
+      await this.removeStepWithinRecipeExecution(step.id);
     }
     await this.stepWithinRecipeExecutionService.removeStepWithinRecipeExecutionByStep(recipeExecutionId);
     return this.recipeExecutionRepository.delete({id: recipeExecutionId});

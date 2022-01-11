@@ -130,7 +130,7 @@ export class StepWithinRecipeExecutionService {
     return recipeExecutions.length > 0;
   }
 
-  //TODO: demander à Nathan comment bin nommer cette fonction
+  //TODO: demander à Nathan comment bien nommer cette fonction
   async removeStepWithinRecipeExecutionByStep(stepId: number) {
     let stepsWithinRecipeExecution = await this.stepWithinRecipeExecutionRepository.find({stepId: stepId});
     for (let stepWithinRecipeExecution of stepsWithinRecipeExecution) {
