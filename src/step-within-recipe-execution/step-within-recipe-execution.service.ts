@@ -25,21 +25,13 @@ export class StepWithinRecipeExecutionService {
       }, HttpStatus.CONFLICT);
     } else {
 
-      //Si l'étape que l'on veut ajouter est une progression il faut vérifier qu'elle ne contient pas déjà l'étape dans
-      // laquelle on veut l'ajouter sinon boucle infini
-      let stepContainRecipeExecution = await this.stepWithinRecipeExecutionRepository.find({
-        stepId: createStepWithinRecipeExecutionDto.recipeExecutionId,
-        recipeExecutionId: createStepWithinRecipeExecutionDto.stepId,
-      });
-
-      if (stepContainRecipeExecution.length > 0) {
+      if(await this.stepIsInThisRecipeExecution(createStepWithinRecipeExecutionDto.recipeExecutionId, createStepWithinRecipeExecutionDto.stepId)){
         throw new HttpException({
           status: HttpStatus.CONFLICT,
           error: 'The step you want to add to the recipe already contains this recipe in its step list, ' +
             'you cannot add recipes to each other in another recipe ',
         }, HttpStatus.CONFLICT);
       } else {
-
         //On récupère le nombre d'étape dajà présent dans la recette pour trouver le number de la recette
         let steps = await this.findAllStepInRecipeExecution(
           createStepWithinRecipeExecutionDto.recipeExecutionId,
@@ -52,6 +44,24 @@ export class StepWithinRecipeExecutionService {
         });
       }
     }
+  }
+
+  async stepIsInThisRecipeExecution(recipeExecutionId: number, stepId: number): Promise<boolean>{
+    //Si l'étape que l'on veut ajouter est une progression il faut vérifier qu'elle ne contient pas déjà l'étape dans
+    // laquelle on veut l'ajouter sinon boucle infini
+    let stepContainRecipeExecution = await this.stepWithinRecipeExecutionRepository.find({
+      stepId: recipeExecutionId,
+      recipeExecutionId: stepId,
+    });
+
+    if (stepContainRecipeExecution.length > 0) {
+      return true;
+    }
+    let recipeExecutions = await this.findAllProgressionInRecipeExecution(stepId);
+    for(let recipeExecution of recipeExecutions){
+      return await this.stepIsInThisRecipeExecution(recipeExecutionId, recipeExecution.stepId);
+    }
+    return false;
   }
 
   findAll() {
