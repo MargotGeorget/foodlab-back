@@ -23,7 +23,7 @@ export class IngredientCategoryService {
   }
 
   findOne(id: number) {
-    return this.ingredientCategoryRepository.find({id: id});
+    return this.ingredientCategoryRepository.findOne({id: id});
   }
 
   update(id: number, updateIngredientCategoryDto: UpdateIngredientCategoryDto) {
