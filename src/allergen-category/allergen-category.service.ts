@@ -23,7 +23,7 @@ export class AllergenCategoryService {
   }
 
   findOne(id: number) {
-    return this.allergenCategoryRepository.find({id: id});
+    return this.allergenCategoryRepository.findOne({id: id});
   }
 
   update(id: number, updateIngredientCategoryDto: UpdateAllergenCategoryDto) {
