@@ -27,6 +27,10 @@ export class UserService {
         .execute();
   }
 
+  create2(createUserDto: CreateUserDto) {
+    return this. userRepository.save(createUserDto);
+  }
+
   findAll() {
     return getConnection()
         .createQueryBuilder()

@@ -4,6 +4,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import {JwtAuthGuard} from "../auth/guards/jwt-auth.guard";
 import {AdminGuard} from "../auth/guards/admin.guard";
+import * as bcrypt from 'bcryptjs';
 
 @Controller('user')
 export class UserController {
@@ -15,6 +16,16 @@ export class UserController {
     //console.log(req);
     return this.userService.create(createUserDto);
   }
+
+  @UseGuards(AdminGuard)
+  @Post('create')
+  create2(@Request() req, @Body() createUserDto: CreateUserDto) {
+    //console.log(req);
+    createUserDto.password = bcrypt.hashSync(createUserDto.password, 8)
+    return this.userService.create2(createUserDto);
+  }
+
+
 
   @UseGuards(AdminGuard)
   @Get()
